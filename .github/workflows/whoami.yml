@@ -1,1 +1,16 @@
+name: Test-Workflow for CT API
+on:
+  workflow_dispatch:
 
+env:
+  API_URL: https://elkw2806.church.tools/api
+
+jobs:
+  api-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: run check
+        run: |
+          curl -X GET -H 'Authorization: Login ${{ secrets.ADMIN_TOKEN }}' ${{ env.API_URL }}/whoami
+        
+        

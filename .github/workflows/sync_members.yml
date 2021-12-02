@@ -1,0 +1,26 @@
+name: Mitarbeiter Sync
+on:
+  workflow_dispatch:
+  cron:
+    - "0 0 * * *"
+
+env:
+  API_URL: https://elkw2806.church.tools/api
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install pipenv
+        run: |
+          pip install pipenv
+
+      - name: install packages
+        run: |
+          pipenv install
+
+      - name: run sync script
+        run: |
+          pipenv run python syncAlleMitarbeiter.py

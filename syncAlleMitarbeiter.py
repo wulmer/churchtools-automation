@@ -81,6 +81,8 @@ if __name__ == "__main__":
     to_remove = existing_group_member_ids - member_person_ids
 
     for p in to_add:
+        print(f'Adding #{p}')
         ct.add_to_group(who=p, to=all_members_group_id)
     for p in to_remove:
+        print(f'Removing #{p}')
         ct.remove_from_group(who=p, from_=all_members_group_id)

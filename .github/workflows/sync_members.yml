@@ -1,8 +1,8 @@
 name: Mitarbeiter Sync
 on:
   workflow_dispatch:
-  cron:
-    - "0 0 * * *"
+  schedule:
+    - cron: "0 * * * *"
 
 env:
   API_URL: https://elkw2806.church.tools/api

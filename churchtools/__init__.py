@@ -18,6 +18,18 @@ class ChurchToolsApi:
         )
         response.raise_for_status()
 
+    def get_person(self, person_id):
+        response = self._session.get(self._base_url + f"/persons/{person_id}")
+        response.raise_for_status()
+        return response.json()["data"]
+
+    def get_default_email_for_person(self, person_id):
+        person = self.get_person(person_id)
+        emails = person.get("emails", [])
+        for email in emails:
+            if email["isDefault"] == True:
+                return email["email"]
+
     def get_persons(self, statuses=None):
         params = {}
         if statuses is not None:

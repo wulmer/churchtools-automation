@@ -1,7 +1,5 @@
 import os
 
-import requests
-
 from churchtools import ChurchToolsApi
 
 if __name__ == "__main__":

@@ -1,0 +1,19 @@
+# redirections/virtual aliases
+single_bar@domain2.de
+	bar@foo.com
+# with comment between two entries
+single_baz@domain2.de
+	baz@foo.com
+
+group@domain2.de
+	bar@foo.com
+	baz@foo.com
+	admin@foo.com
+no_empty_line_before@domain2.de
+	admin@foo.com
+
+group-with-comments@domain2.de
+	# here comes the comment
+	some entry
+
+# vim: ft=aliases

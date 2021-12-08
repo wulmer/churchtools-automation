@@ -11,3 +11,9 @@ mypy = "*"
 flake8 = "*"
 flake8-isort = "*"
 isort = "*"
+black = "*"
+pytest = "*"
+pytest-cov = "*"
+
+[pipenv]
+allow_prereleases = true

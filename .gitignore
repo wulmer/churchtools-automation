@@ -103,3 +103,10 @@ dist
 
 # TernJS port file
 .tern-port
+
+# postfix db file
+*.db
+
+# temporary files
+.venv/
+churchtools_automation.egg-info/

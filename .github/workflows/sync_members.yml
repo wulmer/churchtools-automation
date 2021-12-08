@@ -7,6 +7,7 @@ on:
 env:
   API_URL: https://elkw2806.church.tools/api
   ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+  BASE_URL: ${{ secrets.BASE_URL }}
 
 jobs:
   sync:

@@ -7,6 +7,10 @@ from typing import Dict, List, Set
 class PostMap:
     def __init__(self, p: Path, emaildomain: str = None):
         """Parse postfix alias table and provide its data."""
+        subprocess.check_call(
+            ["/usr/sbin/postmap", str(p)],
+            shell=False,
+        )
         table = subprocess.check_output(
             ["/usr/sbin/postmap", "-s", str(p)], shell=False
         ).decode()

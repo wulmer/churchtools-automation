@@ -68,7 +68,7 @@ if __name__ == "__main__":
                         "--color=never",
                         "--unified=1",
                         str(orig_file),
-                        str(target_file),
+                        str(backup_file),
                     ],
                     capture_output=True,
                 ).stdout.decode()

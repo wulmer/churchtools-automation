@@ -8,7 +8,8 @@ from churchtools import ChurchToolsApi
 from postfix_sync import PostMap, Mapping
 
 if __name__ == "__main__":
-    postfix_db = Path("/etc/postfix/virtual")
+    #postfix_db = Path("/etc/postfix/virtual")
+    postfix_db = Path("/tmp/virtual")
     if not postfix_db.exists():
         print(
             f"Cannot find file {postfix_db}! Are you running this script on the right machine?"
@@ -51,7 +52,7 @@ if __name__ == "__main__":
 
     if has_updates:
         orig_file = postfix_db
-        target_file = Path(f"/tmp/{postfix_db.stem}")
+        target_file = postfix_db
         backup_file = target_file.with_suffix(".backup")
         shutil.copyfile(str(orig_file), backup_file)
         try:

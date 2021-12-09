@@ -25,7 +25,8 @@ test: .venv/bin/pipenv .venv/bin/pytest
 format: .venv/bin/pipenv .venv/bin/black
 	.venv/bin/pipenv run black .
 
-postfix_sync: .venv/bin/pipenv
+.PHONY: sync_postfix
+sync_postfix: .venv/bin/pipenv
 	@PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install 1>/dev/null 2>&1
 	@.venv/bin/pip install -e . 1>/dev/null 2>&1
 	@.venv/bin/pipenv --bare run python syncPostfixAliases.py

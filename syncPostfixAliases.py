@@ -25,6 +25,7 @@ if __name__ == "__main__":
         "Kirchengemeinderat": "kgr-list@johanneskirche-rutesheim.de",
         "Musik-Team": "musikteam-list@johanneskirche-rutesheim.de",
         "Mesner": "mesner-list@johanneskirche-rutesheim.de",
+        "Netzwerktreffen": "netzwerktreffen-list@johanneskirche-rutesheim.de",
     }
 
     has_updates = False

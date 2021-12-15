@@ -67,8 +67,8 @@ if __name__ == "__main__":
                         "diff",
                         "--color=never",
                         "--unified=1",
-                        str(orig_file),
                         str(backup_file),
+                        str(orig_file),
                     ],
                     capture_output=True,
                 ).stdout.decode()

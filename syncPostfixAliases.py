@@ -8,8 +8,7 @@ from churchtools import ChurchToolsApi
 from postfix_sync import PostMap, Mapping
 
 if __name__ == "__main__":
-    # postfix_db = Path("/etc/postfix/virtual")
-    postfix_db = Path("/tmp/virtual")
+    postfix_db = Path("/etc/postfix/virtual")
     if not postfix_db.exists():
         print(
             f"Cannot find file {postfix_db}! Are you running this script on the right machine?"

@@ -30,6 +30,12 @@ class ChurchToolsApi:
             if email["isDefault"] == True:
                 return email["email"]
 
+    def get_tags_for_person(self, person_id):
+        response = self._session.get(self._base_url + f"/persons/{person_id}/tags")
+        response.raise_for_status()
+        tags = {d['name'] for d in response.json()["data"]}
+        return tags
+
     def get_persons(self, statuses=None):
         params = {}
         if statuses is not None:

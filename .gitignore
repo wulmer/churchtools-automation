@@ -108,5 +108,7 @@ dist
 *.db
 
 # temporary files
+*.swp
 .venv/
 churchtools_automation.egg-info/
+__pycache__/

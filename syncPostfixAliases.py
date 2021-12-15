@@ -14,6 +14,10 @@ if __name__ == "__main__":
             f"Cannot find file {postfix_db}! Are you running this script on the right machine?"
         )
         sys.exit(1)
+    
+    if not os.environ.get('BASE_URL') or not os.environ.get('ADMIN_TOKEN'):
+        print("You must define BASE_URL and ADMIN_TOKEN!")
+        sys.exit(2)
 
     postmap = PostMap(postfix_db)
     mappings = Mapping.fromfile(postfix_db)
@@ -35,6 +39,7 @@ if __name__ == "__main__":
         recipients = [
             PostMap.normalize_email(ct.get_default_email_for_person(m["personId"]))
             for m in members
+            if 'postfix:ignore' not in ct.get_tags_for_person(m["personId"])
         ]
         recipients_in_db = [
             PostMap.normalize_email(e) for e in postmap.get_recepients_for_alias(alias)

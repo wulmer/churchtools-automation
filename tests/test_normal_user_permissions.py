@@ -1,4 +1,5 @@
 from functools import partial
+from itertools import chain
 
 import pytest_bdd
 import requests
@@ -19,9 +20,16 @@ def test_normal_user_cannot_see_others():
 
 
 @given("a user who is not member of any group", target_fixture="user")
-def no_group_user(api: ChurchToolsApi):
-    for user in api.get_persons():
+def no_group_user(api: ChurchToolsApi, request):
+    all_users = api.get_persons()
+    user_id = request.config.cache.get('ct/user/not-member-of-any-group/id', None)
+    if user_id is not None:
+        potential_users = chain([api.get_person(user_id)], all_users)
+    else:
+        potential_users = all_users
+    for user in potential_users:
         if len(api.get_memberships(user["id"])) == 0:
+            request.config.cache.set('ct/user/not-member-of-any-group/id', user['id'])
             return user
     raise RuntimeError("No user found who is in no group!")
 
@@ -61,9 +69,15 @@ def test_normal_user_in_a_gremium_can_only_see_other_group_members():
     parsers.parse("a user who is only member of one '{group_type}' group"),
     target_fixture="user",
 )
-def a_user_who_is_only_member_of_one_group_type(api: ChurchToolsApi, group_type):
+def a_user_who_is_only_member_of_one_group_type(api: ChurchToolsApi, group_type, request):
+    all_users = api.get_persons()
+    user_id = request.config.cache.get(f'ct/user/member-of-only-one-group-{group_type}/id', None)
+    if user_id is not None:
+        potential_users = chain([api.get_person(user_id)], all_users)
+    else:
+        potential_users = all_users
     required_group_type_id = api.get_id_of_group_type(group_type)
-    for user in api.get_persons():
+    for user in potential_users:
         counter_for_groups_of_correct_type = 0
         for membership in api.get_memberships(user["id"]):
             assert membership["group"]["domainType"] == "group"
@@ -73,6 +87,7 @@ def a_user_who_is_only_member_of_one_group_type(api: ChurchToolsApi, group_type)
             group = api.get_group(id=membership["group"]["domainIdentifier"])
             group_type_id = group["information"]["groupTypeId"]
             if group_type_id == required_group_type_id:
+                request.config.cache.set(f'ct/user/member-of-only-one-group-{group_type}/id', user['id'])
                 return user
             break
     raise RuntimeError(

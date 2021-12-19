@@ -130,11 +130,10 @@ def test_update_without_address(mapping_file):
     assert entry["end_line"] == 8
 
 
-def test_revert_of_invalid_changes(mapping_file):
-    orig_content = mapping_file.read_bytes()
+def test_invalid_changes_raise_error(mapping_file):
+    orig_content = mapping_file.read_text()
     mf = Mapping.fromfile(mapping_file)
     entry = mf.get("group@domain2.de")
     mf.update("group@domain2.de", ["x\ngroup@domain2.de y\n"])
     with pytest.raises(RuntimeError):
         mf.tofile(mapping_file)
-    assert orig_content == mapping_file.read_bytes()

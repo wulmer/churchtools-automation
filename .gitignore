@@ -108,6 +108,7 @@ dist
 *.db
 
 # temporary files
+.coverage
 *.swp
 .venv/
 churchtools_automation.egg-info/

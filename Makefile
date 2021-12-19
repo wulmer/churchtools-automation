@@ -19,8 +19,10 @@ setup: .venv/bin/pipenv
 .PHONY: test
 test: .venv/bin/pipenv .venv/bin/pytest
 	.venv/bin/pytest \
+		--cov=. \
 		--cov-report term \
-		${PYTEST_ARGS} -v tests
+		--cov-report term-missing \
+		${PYTEST_ARGS} -vv tests
 
 format: .venv/bin/pipenv .venv/bin/black
 	.venv/bin/pipenv run black .

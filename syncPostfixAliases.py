@@ -36,11 +36,19 @@ if __name__ == "__main__":
         alias = groups_to_sync[group_ctname]
         ctgroup = list(ct.get_groups(query=group_ctname))[0]
         members = ct.get_group_members(group_id=ctgroup["id"])
-        recipients = [
-            PostMap.normalize_email(ct.get_default_email_for_person(m["personId"]))
-            for m in members
-            if "postfix:ignore" not in ct.get_tags_for_person(m["personId"])
-        ]
+        recipients = []
+        for m in members:
+            if "postfix:ignore" in ct.get_tags_for_person(m["personId"]):
+                continue
+            default_email = ct.get_default_email_for_person(m["personId"])
+            if not default_email:
+                print(
+                    f"WARNING: User #{m['personId']} has no default email "
+                    f"address! Cannot add user to group {group_ctname}!"
+                )
+                continue
+            recipients.append(PostMap.normalize_email(default_email))
+
         recipients_in_db = [
             PostMap.normalize_email(e) for e in postmap.get_recepients_for_alias(alias)
         ]

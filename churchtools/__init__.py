@@ -1,4 +1,5 @@
-from typing import Dict, Iterator, List, Optional, Set
+from functools import cache
+from typing import Dict, Iterator, List, Set
 
 import requests
 
@@ -13,7 +14,8 @@ class ChurchToolsApi:
         self._session.headers.update({"Authorization": f"Login {token}"})
         self.non_protected_group_ids = set()
 
-    def get_id_of_group_type(self, group_type: str):
+    @cache
+    def get_id_of_group_type(self, group_type: str) -> int:
         response = self._session.get(self._base_url + "/person/masterdata")
         response.raise_for_status()
         group_types = response.json()["data"]["groupTypes"]
@@ -22,7 +24,22 @@ class ChurchToolsApi:
         )
         if len(filtered_group_types) == 0:
             raise ValueError(f"No group type found for '{group_type}'!")
-        return filtered_group_types[0]["id"]
+        return int(filtered_group_types[0]["id"])
+
+    @cache
+    def get_id_of_group_role(self, group_type_id: int, group_role: str):
+        response = self._session.get(self._base_url + "/masterdata/person/roles")
+        response.raise_for_status()
+        roles = response.json()["data"]
+        filtered_roles = list(
+            filter(
+                lambda r: r["groupTypeId"] == group_type_id and r["name"] == group_role,
+                roles,
+            )
+        )
+        if len(filtered_roles) == 0:
+            raise ValueError(f"No group role found for group ID '{group_type_id}'!")
+        return int(filtered_roles[0]["id"])
 
     def create_group(self, group_name: str, group_type: str) -> Dict:
         group_type_id = self.get_id_of_group_type(group_type=group_type)
@@ -72,7 +89,7 @@ class ChurchToolsApi:
         return response.json()["data"]
 
     def get_system_person_by_name(self, name: str) -> Dict:
-        for user in self.get_persons(statuses=SYSTEMUSER_STATUSCODE):
+        for user in self.get_persons(statuses=[SYSTEMUSER_STATUSCODE]):
             if user["firstName"] == name or user["lastName"] == name:
                 return user
         raise KeyError(f"System user with name '{name}' not found.")
@@ -81,7 +98,7 @@ class ChurchToolsApi:
         person = self.get_person(person_id)
         emails = person.get("emails", [])
         for email in emails:
-            if email["isDefault"] == True:
+            if email["isDefault"]:
                 return email["email"]
         raise ValueError(f"Person #{person_id} has no default email address!")
 
@@ -91,7 +108,7 @@ class ChurchToolsApi:
         tags = {d["name"] for d in response.json()["data"]}
         return tags
 
-    def get_persons(self, statuses: str = None) -> Iterator[Dict]:
+    def get_persons(self, statuses: List[str] = None) -> Iterator[Dict]:
         params = {}
         if statuses is not None:
             params["status_ids[]"] = statuses
@@ -104,7 +121,7 @@ class ChurchToolsApi:
             response = self._session.get(self._base_url + f"/groups/{id}")
         elif name is not None:
             response = self._session.get(
-                self._base_url + f"/groups", params={"query": name}
+                self._base_url + "/groups", params={"query": name}
             )
             multiple_results = True
         else:
@@ -117,18 +134,29 @@ class ChurchToolsApi:
                 return response.json()["data"][0]
             else:
                 return response.json()["data"]
-        except:
-            raise ValueError(response)
+        except Exception as e:
+            raise ValueError(response) from e
 
-    def get_groups(self, query: str = None) -> Iterator[Dict]:
+    def get_groups(
+        self, query: str = None, group_type_ids: List[int] = None
+    ) -> Iterator[Dict]:
         params = {}
         if query is not None:
             params["query"] = query
+        if group_type_ids is not None:
+            params["group_type_ids[]"] = group_type_ids
         for group in self.paginate(self._base_url + "/groups", params=params):
             yield group
 
-    def get_group_members(self, group_id: int) -> Iterator[Dict]:
-        for member in self.paginate(self._base_url + f"/groups/{group_id}/members"):
+    def get_group_members(
+        self, group_id: int, role_ids: List[int] = None
+    ) -> Iterator[Dict]:
+        params = {}
+        if role_ids is not None:
+            params["role_ids[]"] = role_ids
+        for member in self.paginate(
+            self._base_url + f"/groups/{group_id}/members", params=params
+        ):
             yield member
 
     def get_statuses(self) -> Iterator[Dict]:

@@ -221,7 +221,7 @@ def these_users_have_status_in_status_list(
     evald_status_list = set(eval(status_list))
     status_ids = [s["id"] for s in statuses if s["name"] in evald_status_list]
     all_person_ids_with_these_statuses = {
-        p["id"] for p in api.get_persons(statuses=status_ids)
+        p["id"] for p in api.get_persons(status_ids=status_ids)
     }
     found_user_ids = search_result
     all_persons_with_wrong_status = found_user_ids - all_person_ids_with_these_statuses

@@ -89,7 +89,7 @@ class ChurchToolsApi:
         return response.json()["data"]
 
     def get_system_person_by_name(self, name: str) -> Dict:
-        for user in self.get_persons(statuses=[SYSTEMUSER_STATUSCODE]):
+        for user in self.get_persons(status_ids=[SYSTEMUSER_STATUSCODE]):
             if user["firstName"] == name or user["lastName"] == name:
                 return user
         raise KeyError(f"System user with name '{name}' not found.")
@@ -108,10 +108,10 @@ class ChurchToolsApi:
         tags = {d["name"] for d in response.json()["data"]}
         return tags
 
-    def get_persons(self, statuses: List[str] = None) -> Iterator[Dict]:
+    def get_persons(self, status_ids: List[str] = None) -> Iterator[Dict]:
         params = {}
-        if statuses is not None:
-            params["status_ids[]"] = statuses
+        if status_ids is not None:
+            params["status_ids[]"] = status_ids
         for person in self.paginate(self._base_url + "/persons", params=params):
             yield person
 

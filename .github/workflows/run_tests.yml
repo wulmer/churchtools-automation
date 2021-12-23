@@ -16,7 +16,7 @@ env:
   BASE_URL: ${{ secrets.BASE_URL }}
 
 jobs:
-  sync:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

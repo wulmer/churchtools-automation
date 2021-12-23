@@ -27,7 +27,7 @@ jobs:
 
       - name: install packages
         run: |
-          pipenv install
+          pipenv install -d
 
       - name: run tests
         run: |

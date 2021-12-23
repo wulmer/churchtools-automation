@@ -33,10 +33,10 @@ class Mapping:
         )
         self._entries = self._parse(self._input)
 
-    def tofile(self, target_file: Path):
+    def tofile(self, target_file: Path, postmap: str = "/usr/sbin/postmap"):
         target_file.write_text(self._input)
         r = subprocess.check_output(
-            ["/usr/sbin/postmap", str(target_file)],
+            [postmap, str(target_file)],
             shell=False,
             stderr=subprocess.STDOUT,
         )

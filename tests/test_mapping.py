@@ -7,6 +7,15 @@ import pytest
 from postfix_sync import Mapping
 
 
+@pytest.fixture
+def postmap():
+    postmap_location = "/usr/sbin/postmap"
+    if Path(postmap_location).exists():
+        return postmap_location
+    else:
+        pytest.skip(f"No postmap found under {postmap_location}")
+
+
 @pytest.fixture(scope="function")
 def mapping_file(tmp_path):
     source_file = Path(__file__).parent.joinpath("etc/virtual.template")
@@ -55,7 +64,9 @@ def test_parsing_with_line_continuation():
 
 def test_parsing_multiple_entries_per_key():
     mf = Mapping.fromtext(
-        "alias@domain.com first@mail.com, second@mail.com,\n\tthird@mail.com\n  fourth@mail.com"
+        "alias@domain.com first@mail.com, second@mail.com,\n"
+        "\tthird@mail.com\n"
+        "  fourth@mail.com"
     )
     assert len(mf) == 1
     assert mf[0]["key"] == "alias@domain.com"
@@ -83,10 +94,10 @@ def test_line_replacement():
     assert "1\n2\n" == Mapping._replace_lines("1\n2\n3\n4\n5", 3, 5, "")
 
 
-def test_verify_update_step(mapping_file):
-    subprocess.check_call(["/usr/sbin/postmap", str(mapping_file)], shell=False)
+def test_verify_update_step(mapping_file, postmap):
+    subprocess.check_call([postmap, str(mapping_file)], shell=False)
     table_before = subprocess.check_output(
-        ["/usr/sbin/postmap", "-s", str(mapping_file)], shell=False
+        [postmap, "-s", str(mapping_file)], shell=False
     ).decode()
     mf = Mapping.fromfile(mapping_file)
     entry = mf.get("group@domain2.de")
@@ -95,9 +106,9 @@ def test_verify_update_step(mapping_file):
     mf.update("group@domain2.de", [""])
     mf.update("group@domain2.de", entry["value"])
     mf.tofile(mapping_file)
-    subprocess.check_call(["/usr/sbin/postmap", str(mapping_file)], shell=False)
+    subprocess.check_call([postmap, str(mapping_file)], shell=False)
     table_after = subprocess.check_output(
-        ["/usr/sbin/postmap", "-s", str(mapping_file)], shell=False
+        [postmap, "-s", str(mapping_file)], shell=False
     ).decode()
     assert table_before == table_after
 
@@ -129,8 +140,8 @@ def test_update_without_address(mapping_file):
     assert entry["end_line"] == 8
 
 
-def test_invalid_changes_raise_error(mapping_file):
+def test_invalid_changes_raise_error(mapping_file, postmap):
     mf = Mapping.fromfile(mapping_file)
     mf.update("group@domain2.de", ["x\ngroup@domain2.de y\n"])
     with pytest.raises(RuntimeError):
-        mf.tofile(mapping_file)
+        mf.tofile(mapping_file, postmap=postmap)

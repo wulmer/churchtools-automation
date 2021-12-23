@@ -29,6 +29,10 @@ jobs:
         run: |
           pipenv install -d
 
+      - name: install local package
+        run: |
+          pipenv run pip install -e .
+
       - name: run tests
         run: |
           pipenv run pytest -vv tests

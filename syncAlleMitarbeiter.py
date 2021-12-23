@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     member_status_ids = [s["id"] for s in ct.get_statuses() if s["isMember"]]
 
-    member_persons = ct.get_persons(statuses=member_status_ids)
+    member_persons = ct.get_persons(status_ids=member_status_ids)
     member_person_ids = {p["id"] for p in member_persons}
 
     existing_group_members = ct.get_group_members(group_id=all_members_group_id)

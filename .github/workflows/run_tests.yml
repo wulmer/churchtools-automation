@@ -38,7 +38,7 @@ jobs:
 
       - name: show pytest cache
         run: |
-          pipenv run pytest --cache-show
+          .venv/bin/pipenv run pytest --cache-show
 
       - name: run tests
         run: |

@@ -21,18 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: install pipenv
+      - name: setup
         run: |
-          pip install pipenv
-
-      - name: install packages
-        run: |
-          pipenv install -d
-
-      - name: install local package
-        run: |
-          pipenv run pip install -e .
+          make setup
 
       - name: run tests
         run: |
-          pipenv run pytest -vv tests
+          make test

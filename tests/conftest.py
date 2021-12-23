@@ -1,5 +1,6 @@
 import os
 from itertools import chain
+from typing import List
 
 import pytest
 import requests
@@ -49,7 +50,9 @@ def no_group_user(api: ChurchToolsApi, request):
     parsers.parse("all users who are '{group_role}' of a '{group_type}' group"),
     target_fixture="search_result",
 )
-def all_users_who_are_role_of_a_group(api: ChurchToolsApi, group_role, group_type):
+def all_users_who_are_role_of_a_group(
+    api: ChurchToolsApi, group_role, group_type
+) -> List[dict]:
     group_type_id = api.get_id_of_group_type(group_type)
     role_id = api.get_id_of_group_role(group_type_id, group_role)
     groups = api.get_groups(group_type_ids=[group_type_id])
@@ -110,10 +113,14 @@ def a_user_who_is_only_member_of_one_group_type(
 
 
 @when("the user searches for other persons", target_fixture="search_result")
-def the_user_searches_for_other_persons(make_user_api, user):
+def the_user_searches_for_other_persons(make_user_api, user) -> List[dict]:
     user_api: ChurchToolsApi = make_user_api(user["id"])
     search_result = user_api.get_persons()
-    return search_result
+    # convert to list to prevent errors if two @then steps read the generator
+    try:
+        return list(search_result)
+    except Exception:
+        return []
 
 
 @when(
@@ -121,17 +128,22 @@ def the_user_searches_for_other_persons(make_user_api, user):
 )
 def the_user_searches_for_other_persons_of_that_group(
     make_user_api, user, group_context
-):
+) -> List[dict]:
     user_api: ChurchToolsApi = make_user_api(user["id"])
     search_result = user_api.get_group_members(group_context[0])
-    return search_result
+    # convert to list to prevent errors if two @then steps read the generator
+    try:
+        return list(search_result)
+    except Exception:
+        return []
 
 
 @when("the user searches for groups", target_fixture="search_result")
-def the_user_searches_for_groups(make_user_api, user):
+def the_user_searches_for_groups(make_user_api, user) -> List[dict]:
     user_api: ChurchToolsApi = make_user_api(user["id"])
     search_result = user_api.get_groups()
-    return search_result
+    # convert to list to prevent errors if two @then steps read the generator
+    return list(search_result)
 
 
 @then("the user should not see other persons")
@@ -192,16 +204,21 @@ def the_user_should_see_all_members_of_that_group(
     assert users_result_ids == global_result_ids
 
 
-@then(parsers.parse("the user should only see up to level {level} details"))
+@then(parsers.parse("the user should only see up to level {level:d} details"))
 def the_user_should_only_see_up_to_level_details(
-    api: ChurchToolsApi, user, search_result, make_user_api
+    api: ChurchToolsApi, user, search_result, make_user_api, level
 ):
     user_api: ChurchToolsApi = make_user_api(user["id"])
     for result in search_result:
-        person_data = user_api.get_person(result["personId"])
-        breakpoint()
-        assert person_data
-        break
+        other_person_id = result["personId"]
+        if user["id"] == other_person_id:
+            continue  # no need to check seeing one's own details
+        permissions = user_api.get_person_permissions(other_person_id)
+        active_level = permissions["churchdb"]["+see persons"]
+        assert active_level == level, (
+            f"User #{user['id']} can only see level {active_level} "
+            f"of person #{result['personId']} instead of level {level}"
+        )
 
 
 @then("the user should see all non-hidden groups")

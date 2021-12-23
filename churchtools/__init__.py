@@ -163,6 +163,13 @@ class ChurchToolsApi:
         for status in self.paginate(self._base_url + "/statuses"):
             yield status
 
+    def get_person_permissions(self, other_person_id: int) -> dict:
+        response = self._session.get(
+            self._base_url + f"/permissions/internal/persons/{other_person_id}"
+        )
+        response.raise_for_status()
+        return response.json()["data"]
+
     def paginate(self, url: str, params: Dict[str, str] = None):
         if params is None:
             params = {}

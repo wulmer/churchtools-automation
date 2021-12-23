@@ -7,7 +7,6 @@ from pytest_bdd import given, parsers, then, when
 
 from churchtools import ChurchToolsApi
 
-
 GROUP_ID_ALLE_MITARBEITER = 172
 
 
@@ -18,14 +17,14 @@ def group_context():
 
 @pytest.fixture
 def api():
-    return ChurchToolsApi(os.environ["BASE_URL"], os.environ["ADMIN_TOKEN"])
+    return ChurchToolsApi(os.environ["API_BASE_URL"], os.environ["ADMIN_TOKEN"])
 
 
 @pytest.fixture
 def make_user_api(api: ChurchToolsApi):
     def wrapped_function(user_id: int):
         token = api.get_login_token(user_id)
-        user_api = ChurchToolsApi(os.environ["BASE_URL"], token)
+        user_api = ChurchToolsApi(os.environ["API_BASE_URL"], token)
         return user_api
 
     return wrapped_function

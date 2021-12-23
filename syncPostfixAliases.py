@@ -16,14 +16,14 @@ if __name__ == "__main__":
         )
         sys.exit(1)
 
-    if not os.environ.get("BASE_URL") or not os.environ.get("ADMIN_TOKEN"):
-        print("You must define BASE_URL and ADMIN_TOKEN!")
+    if not os.environ.get("API_BASE_URL") or not os.environ.get("ADMIN_TOKEN"):
+        print("You must define API_BASE_URL and ADMIN_TOKEN!")
         sys.exit(2)
 
     postmap = PostMap(postfix_db)
     mappings = Mapping.fromfile(postfix_db)
 
-    ct = ChurchToolsApi(os.environ["BASE_URL"], os.environ["ADMIN_TOKEN"])
+    ct = ChurchToolsApi(os.environ["API_BASE_URL"], os.environ["ADMIN_TOKEN"])
     groups_to_sync = {
         "Technik-Team": "technik-list@johanneskirche-rutesheim.de",
         "Kirchengemeinderat": "kgr-list@johanneskirche-rutesheim.de",

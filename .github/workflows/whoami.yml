@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 env:
-  API_URL: https://elkw2806.church.tools/api
+  API_BASE_URL: ${{ secrets.API_BASE_URL }}
 
 jobs:
   api-test:
@@ -11,6 +11,6 @@ jobs:
     steps:
       - name: run check
         run: |
-          curl -X GET -H 'Authorization: Login ${{ secrets.ADMIN_TOKEN }}' ${{ env.API_URL }}/whoami
+          curl -X GET -H 'Authorization: Login ${{ secrets.ADMIN_TOKEN }}' ${{ env.API_BASE_URL }}/whoami
         
         

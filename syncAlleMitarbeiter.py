@@ -3,7 +3,7 @@ import os
 from churchtools import ChurchToolsApi
 
 if __name__ == "__main__":
-    ct = ChurchToolsApi(os.environ["BASE_URL"], os.environ["ADMIN_TOKEN"])
+    ct = ChurchToolsApi(os.environ["API_BASE_URL"], os.environ["ADMIN_TOKEN"])
 
     all_members_group_id = list(ct.get_groups(query="Auto-Gruppe: Alle Mitarbeiter"))[
         0

@@ -5,7 +5,6 @@ from pathlib import Path
 import pytest
 
 from postfix_sync import Mapping
-from postfix_sync.postmap import PostMap
 
 
 @pytest.fixture(scope="function")
@@ -131,9 +130,7 @@ def test_update_without_address(mapping_file):
 
 
 def test_invalid_changes_raise_error(mapping_file):
-    orig_content = mapping_file.read_text()
     mf = Mapping.fromfile(mapping_file)
-    entry = mf.get("group@domain2.de")
     mf.update("group@domain2.de", ["x\ngroup@domain2.de y\n"])
     with pytest.raises(RuntimeError):
         mf.tofile(mapping_file)

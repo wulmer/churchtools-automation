@@ -11,7 +11,8 @@ if __name__ == "__main__":
     postfix_db = Path("/etc/postfix/virtual")
     if not postfix_db.exists():
         print(
-            f"Cannot find file {postfix_db}! Are you running this script on the right machine?"
+            f"Cannot find file {postfix_db}! Are you running "
+            "this script on the right machine?"
         )
         sys.exit(1)
 
@@ -58,7 +59,8 @@ if __name__ == "__main__":
         to_add = set(recipients) - set(recipients_in_db)
         to_remove = set(recipients_in_db) - set(recipients)
         print(
-            f"Updating list for group '{group_ctname}': adding {to_add} ; removing {to_remove}"
+            f"Updating list for group '{group_ctname}': "
+            f"adding {to_add} ; removing {to_remove}"
         )
         mappings.update(alias, sorted(recipients))
         has_updates = True
@@ -87,6 +89,6 @@ if __name__ == "__main__":
                 ).stdout.decode()
             )
             backup_file.unlink()
-        except:
+        except Exception:
             backup_file.rename(target_file)
             raise

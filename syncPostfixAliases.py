@@ -62,7 +62,7 @@ if __name__ == "__main__":
             f"Updating list for group '{group_ctname}': "
             f"adding {to_add} ; removing {to_remove}"
         )
-        mappings.update(alias, sorted(recipients))
+        mappings.update(alias, sorted(set(recipients)))
         has_updates = True
 
     if has_updates:

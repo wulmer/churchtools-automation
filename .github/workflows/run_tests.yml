@@ -21,6 +21,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: pytest cache
+        id: pytest-cache
+        uses: actions/cache@v2
+        with:
+          path: .pytest_cache
+          key: ${{ runner.os }}-pytest-cache
+
       - uses: actions/setup-python@v2
         with:
           python-version: '3.9'
@@ -28,6 +35,10 @@ jobs:
       - name: setup
         run: |
           make setup
+
+      - name: show pytest cache
+        run: |
+          pipenv run pytest --cache-show
 
       - name: run tests
         run: |

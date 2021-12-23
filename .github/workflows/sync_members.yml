@@ -2,14 +2,37 @@ name: Mitarbeiter Sync
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 1 * * *"
 
 env:
   ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
   API_BASE_URL: ${{ secrets.API_BASE_URL }}
 
 jobs:
-  sync:
+  sync_statuses:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: install pipenv
+        run: |
+          pip install pipenv
+
+      - name: install packages
+        run: |
+          pipenv install
+
+      - name: run sync script
+        run: |
+          pipenv run python syncMitarbeiterStatus.py
+
+
+  sync_allmember_group:
+    needs: sync_statuses
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

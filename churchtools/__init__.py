@@ -162,16 +162,29 @@ class ChurchToolsApi:
         ):
             yield member
 
-    def get_statuses(self) -> Iterator[Dict]:
-        for status in self.paginate(self._base_url + "/statuses"):
-            yield status
-
     def get_person_permissions(self, other_person_id: int) -> dict:
         response = self._session.get(
             self._base_url + f"/permissions/internal/persons/{other_person_id}"
         )
         response.raise_for_status()
         return response.json()["data"]
+
+    def set_person_status(self, person_id, status_id) -> dict:
+        response = self._session.patch(
+            self._base_url + f"/persons/{person_id}", json={"statusId": status_id}
+        )
+        response.raise_for_status()
+        return response.json()["data"]
+
+    def get_status_ids(self) -> Dict[str, int]:
+        status_ids = {}
+        for status in self.get_statuses():
+            status_ids[status["name"]] = status["id"]
+        return status_ids
+
+    def get_statuses(self) -> Iterator[Dict]:
+        for status in self.paginate(self._base_url + "/statuses"):
+            yield status
 
     def paginate(self, url: str, params: Dict[str, str] = None):
         if params is None:

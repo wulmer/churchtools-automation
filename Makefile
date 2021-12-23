@@ -22,10 +22,13 @@ test: .venv/bin/pipenv .venv/bin/pytest
 		--cov=. \
 		--cov-report term \
 		--cov-report term-missing \
-		${PYTEST_ARGS} -vv tests
+		${PYTEST_ARGS} -v tests
 
 format: .venv/bin/pipenv .venv/bin/black
 	.venv/bin/pipenv run black .
+
+lint: .venv/bin/pipenv .venv/bin/flake8
+	.venv/bin/pipenv run flake8 *.py tests churchtools postfix_sync
 
 .PHONY: sync_postfix
 sync_postfix: .venv/bin/pipenv

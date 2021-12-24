@@ -41,7 +41,10 @@ if __name__ == "__main__":
         for m in members:
             if "postfix:ignore" in ct.get_tags_for_person(m["personId"]):
                 continue
-            default_email = ct.get_default_email_for_person(m["personId"])
+            try:
+                default_email = ct.get_default_email_for_person(m["personId"])
+            except ValueError:
+                default_email = None
             if not default_email:
                 print(
                     f"WARNING: User #{m['personId']} has no default email "

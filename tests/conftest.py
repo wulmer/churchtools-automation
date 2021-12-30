@@ -52,6 +52,16 @@ def make_user_api(api: ChurchToolsApi):
     return wrapped_function
 
 
+# Fixtures for BDD
+
+
+@given(parsers.parse("all '{group_type}' groups"), target_fixture="search_result")
+def all_groups_of_a_type(api: ChurchToolsApi, group_type: str):
+    group_type_id = api.get_id_of_group_type(group_type)
+    groups = api.get_groups(group_type_ids=[group_type_id])
+    return groups
+
+
 @given("a user who is not member of any group", target_fixture="user")
 def no_group_user(api: ChurchToolsApi, request):
     all_users = api.get_persons()
@@ -167,6 +177,15 @@ def the_user_searches_for_groups(make_user_api, user) -> List[dict]:
     return list(search_result)
 
 
+@then(parsers.parse("there is at least one '{role}' in that group"))
+def there_is_at_least_one_role_in_that_group(
+    role, search_result: List[dict], api: ChurchToolsApi
+):
+    for group in search_result:
+        role_id = api.get_id_of_group_role(group["information"]["groupTypeId"], role)
+        assert api.get_group_members(group["id"], role_ids=[role_id])
+
+
 @then("the user should not see other persons")
 @then("there should be only public search results")
 def there_should_be_only_public_search_results(search_result, user):
@@ -240,6 +259,19 @@ def the_user_should_only_see_up_to_level_details(
             f"User #{user['id']} can only see level {active_level} "
             f"of person #{result['personId']} instead of level {level}"
         )
+
+
+@then("the user should have the permission to edit other persons' details")
+def the_user_should_have_the_permission_to_edit_other_persons_details(
+    api: ChurchToolsApi, user, search_result, make_user_api
+):
+    user_api: ChurchToolsApi = make_user_api(user["id"])
+    for result in search_result:
+        other_person_id = result["personId"]
+        if user["id"] == other_person_id:
+            continue  # no need to check seeing one's own details
+        permissions = user_api.get_person_permissions(other_person_id)
+        assert permissions["churchdb"]["+edit persons"]
 
 
 @then("the user should see all non-hidden groups")

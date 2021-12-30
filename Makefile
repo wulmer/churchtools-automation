@@ -1,9 +1,12 @@
 help:
 	@echo "Available make targets:"
 	@echo ""
-	@echo "  setup         Set up local virtual environment"
-	@echo "  test          Run pytest tests"
-	@echo "  format        Format source code with black"
+	@echo "  setup              Set up local virtual environment"
+	@echo "  test               Run pytest tests"
+	@echo "  test-our-ct-setup  Test our CT configuration"
+	@echo "  format             Format source code with black"
+	@echo "  lint               Run flake8"
+	@echo "  sync_postfix       Run the script for synching a Postfix virtual alias file"
 	@echo ""
 
 .venv/bin/python3:
@@ -26,12 +29,17 @@ setup: .venv_is_uptodate
 
 .PHONY: test
 test: .venv/bin/pipenv .venv/bin/pytest
+	rm -rf htmlcov
 	.venv/bin/pytest \
 		--cov=. \
 		--cov-report html \
 		--cov-report term \
 		--cov-report term-missing \
-		${PYTEST_ARGS} -v postfix_sync/tests tests
+		${PYTEST_ARGS} -v postfix_sync/tests
+
+test-our-ct-setup: .venv/bin/pipenv .venv/bin/pytest
+	.venv/bin/pytest \
+		${PYTEST_ARGS} -v our_churchtools_setup/tests
 
 format: .venv/bin/pipenv .venv/bin/black
 	.venv/bin/pipenv run black .

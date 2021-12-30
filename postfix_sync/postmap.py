@@ -5,6 +5,10 @@ from typing import Dict, List, Set
 
 
 class PostMap:
+    """Interface for postmap.
+
+    Retrieves aliases and recipients from a mapping file."""
+
     def __init__(self, p: Path, emaildomain: str = None):
         """Parse postfix alias table and provide its data."""
         subprocess.check_call(

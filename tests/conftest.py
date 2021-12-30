@@ -1,5 +1,7 @@
 import os
+import shutil
 from itertools import chain
+from pathlib import Path
 from typing import List
 
 import pytest
@@ -11,6 +13,25 @@ from churchtools import ChurchToolsApi
 GROUP_ID_ALLE_MITARBEITER = 172
 
 
+# Fixtures for test_postmap and test_mapping
+@pytest.fixture
+def postmap():
+    postmap_location = "/usr/sbin/postmap"
+    if Path(postmap_location).exists():
+        return postmap_location
+    else:
+        pytest.skip(f"No postmap found under {postmap_location}")
+
+
+@pytest.fixture(scope="function")
+def mapping_file(tmp_path):
+    source_file = Path(__file__).parent.joinpath("etc/virtual.template")
+    mapping_file = tmp_path / "virtual"
+    shutil.copyfile(src=str(source_file), dst=str(mapping_file))
+    return mapping_file
+
+
+# Fixtures for scenarios tests
 @pytest.fixture
 def group_context():
     return []

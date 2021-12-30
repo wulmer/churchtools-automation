@@ -4,6 +4,10 @@ from pathlib import Path
 
 
 class Mapping:
+    """Postmap mapping file.
+
+    Read, update and write postmap mapping files."""
+
     @classmethod
     def fromfile(cls, mapping_file: Path):
         input = mapping_file.read_text()

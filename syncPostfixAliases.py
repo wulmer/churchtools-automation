@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 from churchtools import ChurchToolsApi
-from postfix_sync import PostMap, Mapping
+from postfix_sync import Mapping, PostMap
 
 if __name__ == "__main__":
     postfix_db = Path("/etc/postfix/virtual")

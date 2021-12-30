@@ -111,5 +111,10 @@ dist
 .coverage
 *.swp
 .venv/
-churchtools_automation.egg-info/
+*.egg-info/
 __pycache__/
+.venv_is_uptodate
+
+# auth files
+*.json
+.envrc

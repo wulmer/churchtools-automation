@@ -1,7 +1,5 @@
 import os
-import shutil
 from itertools import chain
-from pathlib import Path
 from typing import List
 
 import pytest
@@ -11,24 +9,6 @@ from pytest_bdd import given, parsers, then, when
 from churchtools import ChurchToolsApi
 
 GROUP_ID_ALLE_MITARBEITER = 172
-
-
-# Fixtures for test_postmap and test_mapping
-@pytest.fixture
-def postmap():
-    postmap_location = "/usr/sbin/postmap"
-    if Path(postmap_location).exists():
-        return postmap_location
-    else:
-        pytest.skip(f"No postmap found under {postmap_location}")
-
-
-@pytest.fixture(scope="function")
-def mapping_file(tmp_path):
-    source_file = Path(__file__).parent.joinpath("etc/virtual.template")
-    mapping_file = tmp_path / "virtual"
-    shutil.copyfile(src=str(source_file), dst=str(mapping_file))
-    return mapping_file
 
 
 # Fixtures for scenarios tests
@@ -183,7 +163,13 @@ def there_is_at_least_one_role_in_that_group(
 ):
     for group in search_result:
         role_id = api.get_id_of_group_role(group["information"]["groupTypeId"], role)
-        assert api.get_group_members(group["id"], role_ids=[role_id])
+        persons_with_role = api.get_group_members(group["id"], role_ids=[role_id])
+        for person in persons_with_role:
+            break
+        else:
+            raise AssertionError(
+                f"There is no person with role '{role}' in group '{group['name']}'"
+            )
 
 
 @then("the user should not see other persons")

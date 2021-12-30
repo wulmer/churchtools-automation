@@ -1,4 +1,5 @@
 import os
+import re
 from itertools import chain
 from typing import List
 
@@ -35,7 +36,9 @@ def make_user_api(api: ChurchToolsApi):
 # Fixtures for BDD
 
 
-@given(parsers.parse("all '{group_type}' groups"), target_fixture="search_result")
+@given(
+    parsers.parse("all active '{group_type}' groups"), target_fixture="search_result"
+)
 def all_groups_of_a_type(api: ChurchToolsApi, group_type: str):
     group_type_id = api.get_id_of_group_type(group_type)
     groups = api.get_groups(group_type_ids=[group_type_id])
@@ -161,15 +164,29 @@ def the_user_searches_for_groups(make_user_api, user) -> List[dict]:
 def there_is_at_least_one_role_in_that_group(
     role, search_result: List[dict], api: ChurchToolsApi
 ):
+    if "'" in role:
+        role_str = "'" + role + "'"
+        roles = re.findall(r"'(.*?)'", role_str)
+    else:
+        roles = [role]
+    invalid_groups = []
     for group in search_result:
-        role_id = api.get_id_of_group_role(group["information"]["groupTypeId"], role)
-        persons_with_role = api.get_group_members(group["id"], role_ids=[role_id])
-        for person in persons_with_role:
-            break
-        else:
-            raise AssertionError(
-                f"There is no person with role '{role}' in group '{group['name']}'"
-            )
+        has_required_role = False
+        for r in roles:
+            if has_required_role:
+                break
+            role_id = api.get_id_of_group_role(group["information"]["groupTypeId"], r)
+            persons_with_role = api.get_group_members(group["id"], role_ids=[role_id])
+            for _ in persons_with_role:
+                has_required_role = True
+                break
+        if not has_required_role:
+            invalid_groups.append(group["name"])
+    if invalid_groups:
+        raise AssertionError(
+            f"There is no person with role '{role}' in each "
+            f"of the following groups: {', '.join(invalid_groups)}"
+        )
 
 
 @then("the user should not see other persons")

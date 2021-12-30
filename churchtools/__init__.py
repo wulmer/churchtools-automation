@@ -143,7 +143,7 @@ class ChurchToolsApi:
     def get_groups(
         self, query: str = None, group_type_ids: List[int] = None
     ) -> Iterator[Dict]:
-        params = {}
+        params = {"show_inactive_groups": False}
         if query is not None:
             params["query"] = query
         if group_type_ids is not None:

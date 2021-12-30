@@ -18,11 +18,11 @@ Feature: User permissions in a 'Kleingruppe'
         Then the user should see all members of that group
         And the user should only see up to level 2 details
 
-    Scenario: 'Teilnehmer' user in a 'Kleingruppe' group can see level 2 details of other group members
+    Scenario: 'Teilnehmer' user in a 'Kleingruppe' group can see level 1 details of other group members
         Given a user who is 'Teilnehmer' of one 'Kleingruppe' group
         When the user searches for other persons of that group
         Then the user should see all members of that group
-        And the user should only see up to level 2 details
+        And the user should only see up to level 1 details
 
     Scenario: 'Teilnahme beantragt' user in a 'Kleingruppe' group can not see other group members
         Given a user who is 'Teilnahme beantragt' of one 'Kleingruppe' group

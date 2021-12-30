@@ -7,6 +7,11 @@ Feature: User permissions in a 'Kleingruppe'
         Then the user should see all members of that group
         And the user should only see up to level 3 details
 
+    Scenario: 'Leiter' user in a 'Kleingruppe' group can see level 3 details of other group members
+        Given a user who is 'Leiter' of one 'Kleingruppe' group
+        When the user searches for other persons of that group
+        Then the user should have the permission to edit other persons' details
+
     Scenario: 'Teamer' user in a 'Kleingruppe' group can see level 2 details of other group members
         Given a user who is 'Teamer' of one 'Kleingruppe' group
         When the user searches for other persons of that group

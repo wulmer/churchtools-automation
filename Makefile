@@ -54,6 +54,14 @@ sync_postfix: .venv/bin/pipenv
 	@.venv/bin/pip install -e postfix_sync/src 1>/dev/null 2>&1
 	@.venv/bin/pipenv --bare run python syncPostfixAliases.py
 
+.PHONY: sync_mitarbeiter
+sync_mitarbeiter: .venv/bin/pipenv
+	@PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install 1>/dev/null 2>&1
+	@.venv/bin/pip install -e . 1>/dev/null 2>&1
+	@.venv/bin/pip install -e postfix_sync/src 1>/dev/null 2>&1
+	@.venv/bin/pipenv --bare run python syncMitarbeiterStatus.py
+	@.venv/bin/pipenv --bare run python syncAlleMitarbeiter.py
+
 clean:
 	rm -rf .venv
 	find . -name __pycache__ -type d -exec echo rm -rf \{\} \;

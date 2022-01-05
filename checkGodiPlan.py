@@ -27,7 +27,7 @@ class Mailer:
         mail["Subject"] = "Gottesdienstplan Checker Nachricht"
         mail["From"] = self._my_addr
         mail["To"] = recp
-        self._server.sendmail(
+        self._server.send_message(
             to_addrs=recp,
             from_addr=self._my_addr,
             msg=mail,

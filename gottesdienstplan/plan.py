@@ -3,10 +3,13 @@ import os
 from itertools import zip_longest
 
 import dateparser
+from nextcloud import NextCloud
 
 from .auth import spreadsheet_service
 
-SPREADSHEET_ID = os.environ.get("SPREADSHEET_ID")
+SPREADSHEET_ID = os.environ["SPREADSHEET_ID"]
+NEXTCLOUD_USER = os.environ["NEXTCLOUD_USER"]
+NEXTCLOUD_TOKEN = os.environ["NEXTCLOUD_TOKEN"]
 
 
 class GoogleSheet:
@@ -97,11 +100,12 @@ class GoDiPlanChecker:
         self._plan = Gottesdienstplan()
         self._mail_domain = mail_domain
 
-    def check(self, span="1w", reporter=None):
+    def check(self, span="1w", report=None):
         for event in self._plan.iter_next_future_events(span=span):
-            self.check_basics(event, reporter=reporter)
-            self.check_liturg_opfer(event, reporter=reporter)
-            self.check_technik_ton_kirche(event, reporter=reporter)
+            self.check_basics(event, reporter=report)
+            self.check_liturg_opfer(event, report=report)
+            self.check_technik_ton_kirche(event, report=report)
+            self.check_for_nextcloud_folder_and_ablauf(event, report=report)
 
     def check_basics(self, event, reporter=None):
         if (
@@ -122,11 +126,11 @@ class GoDiPlanChecker:
                 }
             )
 
-    def check_liturg_opfer(self, event, reporter=None):
+    def check_liturg_opfer(self, event, report=None):
         if not event["Liturg+Opfer"]:
-            if reporter is None:
-                reporter = print
-            reporter(
+            if report is None:
+                report = print
+            report(
                 {
                     "message": (
                         "Kein KGR eingetragen am "
@@ -137,11 +141,11 @@ class GoDiPlanChecker:
                 }
             )
 
-    def check_technik_ton_kirche(self, event, reporter=None):
+    def check_technik_ton_kirche(self, event, report=None):
         if not event["Ton Kirche"]:
-            if reporter is None:
-                reporter = print
-            reporter(
+            if report is None:
+                report = print
+            report(
                 {
                     "message": (
                         "Kein Tontechniker am "
@@ -149,5 +153,51 @@ class GoDiPlanChecker:
                         f'{event["Uhrzeit"]}'
                     ),
                     "recipient": f"technik@{self._mail_domain}",
+                }
+            )
+
+    def check_for_nextcloud_folder_and_ablauf(self, event, report=None):
+        if report is None:
+            report = print
+        nc = NextCloud(
+            webdav_url="https://nc-7380861684881042724.nextcloud-ionos.com/remote.php/dav/files/wulmer/",
+            webdav_auth=(NEXTCLOUD_USER, NEXTCLOUD_TOKEN),
+        )
+        base_folder = "Gottesdienste/"
+        event_datum = event["Datum"].strftime("%Y-%m-%d")
+        existing_folders = nc.ls(base_folder, detail=True)
+        for folder in existing_folders:
+            if folder["type"] == "directory" and folder["name"].startswith(
+                f"{base_folder}{event_datum}"
+            ):
+                for file in nc.ls(folder["name"], detail=True):
+                    if "ablauf" in file["name"].lower():
+                        break
+                else:
+                    report(
+                        {
+                            "message": (
+                                "Es ist noch kein Ablauf auf NextCloud für den "
+                                "Gottesdienst am "
+                                f"{event['Datum'].strftime('%a., %d. %b')} abgelegt. "
+                                f"Bitte im Verzeichnis '{base_folder}{event_datum}' "
+                                "eine Datei mit 'Ablauf' im Dateinamen ablegen! "
+                                "Eingetragen für Predigt ist: {event['Prediger']}"
+                            ),
+                            "recipient": f"webmaster@{self._mail_domain}",
+                        }
+                    )
+
+        else:
+            report(
+                {
+                    "message": (
+                        "Es ist noch kein Verzeichnis auf NextCloud für den "
+                        "Gottesdienst am "
+                        f"{event['Datum'].strftime('%a., %d. %b')} angelegt. "
+                        f"Bitte ein Verzeichnis '{base_folder}{event_datum}' anlegen "
+                        "und den Ablauf dort ablegen!"
+                    ),
+                    "recipient": f"webmaster@{self._mail_domain}",
                 }
             )

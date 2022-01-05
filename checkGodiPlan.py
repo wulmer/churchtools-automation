@@ -72,32 +72,11 @@ class Mailer:
 
 if __name__ == "__main__":
     MAIL_DOMAIN = os.environ.get("MAIL_DOMAIN")
-    port = 25
-    smtpd_process = None
-
-    if not MAIL_DOMAIN:
-        port = 1025
-        smtpd_process = subprocess.Popen(
-            [
-                sys.executable,
-                "-m",
-                "smtpd",
-                "-c",
-                "DebuggingServer",
-                "-n",
-                f"localhost:{port}",
-            ]
-        )
 
     p = GoDiPlanChecker(mail_domain=MAIL_DOMAIN)
-    with Mailer(my_addr=f"godiplanchecker@{MAIL_DOMAIN}", port=port) as m:
-        p.check("4w", reporter=m.handle_check_report)
 
-    if smtpd_process is not None:
-        try:
-            outs, errs = smtpd_process.communicate(timeout=1)
-        except subprocess.TimeoutExpired:
-            smtpd_process.kill()
-            outs, errs = smtpd_process.communicate()
-        print(outs)
-        print(errs)
+    if MAIL_DOMAIN:
+        with Mailer(my_addr=f"godiplanchecker@{MAIL_DOMAIN}", port=25) as m:
+            p.check("1w", report=m.handle_check_report)
+    else:
+        p.check("1w", report=print)

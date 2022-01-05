@@ -7,6 +7,7 @@ help:
 	@echo "  format             Format source code with black"
 	@echo "  lint               Run flake8"
 	@echo "  sync_postfix       Run the script for synching a Postfix virtual alias file"
+	@echo "  sync_mitarbeiter   Run the script for synching MA status and All-MA group"
 	@echo ""
 
 .venv/bin/python3:

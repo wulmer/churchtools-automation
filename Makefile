@@ -1,3 +1,5 @@
+PYTHON=python3.8
+
 help:
 	@echo "Available make targets:"
 	@echo ""
@@ -10,10 +12,10 @@ help:
 	@echo "  sync_mitarbeiter   Run the script for synching MA status and All-MA group"
 	@echo ""
 
-.venv/bin/python3:
-	python3 -m venv .venv
+.venv/bin/${PYTHON}:
+	${PYTHON} -m venv .venv
 
-.venv/bin/pipenv: .venv/bin/python3
+.venv/bin/pipenv: .venv/bin/${PYTHON}
 	.venv/bin/pip install pipenv
 
 setup: .venv_is_uptodate
@@ -53,15 +55,15 @@ sync_postfix: .venv/bin/pipenv
 	@PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install 1>/dev/null 2>&1
 	@.venv/bin/pip install -e . 1>/dev/null 2>&1
 	@.venv/bin/pip install -e postfix_sync/src 1>/dev/null 2>&1
-	@.venv/bin/pipenv --bare run python syncPostfixAliases.py
+	@.venv/bin/pipenv --bare run ${PYTHON} syncPostfixAliases.py
 
 .PHONY: sync_mitarbeiter
 sync_mitarbeiter: .venv/bin/pipenv
 	@PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install 1>/dev/null 2>&1
 	@.venv/bin/pip install -e . 1>/dev/null 2>&1
 	@.venv/bin/pip install -e postfix_sync/src 1>/dev/null 2>&1
-	@.venv/bin/pipenv --bare run python syncMitarbeiterStatus.py
-	@.venv/bin/pipenv --bare run python syncAlleMitarbeiter.py
+	@.venv/bin/pipenv --bare run ${PYTHON} syncMitarbeiterStatus.py
+	@.venv/bin/pipenv --bare run ${PYTHON} syncAlleMitarbeiter.py
 
 .PHONY: check_godiplan
 check_godiplan: .venv/bin/pipenv

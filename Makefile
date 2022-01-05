@@ -63,6 +63,12 @@ sync_mitarbeiter: .venv/bin/pipenv
 	@.venv/bin/pipenv --bare run python syncMitarbeiterStatus.py
 	@.venv/bin/pipenv --bare run python syncAlleMitarbeiter.py
 
+.PHONY: check_godiplan
+check_godiplan: .venv/bin/pipenv
+	@PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install 1>/dev/null 2>&1
+	@.venv/bin/pip install -e . 1>/dev/null 2>&1
+	@.venv/bin/pipenv --bare run python checkGodiPlan.py
+
 clean:
 	rm -rf .venv
 	find . -name __pycache__ -type d -exec echo rm -rf \{\} \;

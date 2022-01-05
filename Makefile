@@ -26,6 +26,9 @@ setup: .venv_is_uptodate
 	.venv/bin/pip install -e postfix_sync/src
 	touch .venv_is_uptodate
 
+Pipfile.lock: Pipfile
+	.venv/bin/pipenv lock
+
 .venv/bin/pytest: .venv_is_uptodate
 
 .venv/bin/black: .venv_is_uptodate

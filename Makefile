@@ -10,6 +10,7 @@ help:
 	@echo "  lint               Run flake8"
 	@echo "  sync_postfix       Run the script for synching a Postfix virtual alias file"
 	@echo "  sync_mitarbeiter   Run the script for synching MA status and All-MA group"
+	@echo "  check_godiplan     Run the script for checking the GoDi plan"
 	@echo ""
 
 .venv/bin/${PYTHON}:

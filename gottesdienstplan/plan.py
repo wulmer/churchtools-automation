@@ -103,8 +103,12 @@ class GoDiPlanChecker:
     def check(self, span="1w", report=None):
         for event in self._plan.iter_next_future_events(span=span):
             self.check_basics(event, reporter=report)
+            self.check_mesner(event, report=report)
             self.check_liturg_opfer(event, report=report)
+            self.check_opferzweck(event, report=report)
             self.check_technik_ton_kirche(event, report=report)
+            self.check_technik_video_stream(event, report=report)
+            self.check_technik_songbeamer(event, report=report)
             self.check_for_nextcloud_folder_and_ablauf(event, report=report)
 
     def check_basics(self, event, reporter=None):
@@ -126,6 +130,23 @@ class GoDiPlanChecker:
                 }
             )
 
+    def check_mesner(self, event, report=None):
+        if not event["Mesnerdienst"]:
+            if report is None:
+                report = print
+            report(
+                {
+                    "message": (
+                        "Kein(e) Mesner(in) eingetragen am "
+                        f'{event["Datum"].strftime("%a., %d. %b")}, '
+                        f'{event["Uhrzeit"]}! '
+                        "Bitte eine Person eintragen, oder wenn niemand benötigt "
+                        "wird, ein Minuszeichen eintragen."
+                    ),
+                    "recipient": f"mesner@{self._mail_domain}",
+                }
+            )
+
     def check_liturg_opfer(self, event, report=None):
         if not event["Liturg+Opfer"]:
             if report is None:
@@ -135,9 +156,29 @@ class GoDiPlanChecker:
                     "message": (
                         "Kein KGR eingetragen am "
                         f'{event["Datum"].strftime("%a., %d. %b")}, '
-                        f'{event["Uhrzeit"]} für Liturgendienst und Opfer zählen!'
+                        f'{event["Uhrzeit"]} für Liturgendienst und Opfer zählen! '
+                        "Bitte eine Person eintragen, oder wenn niemand benötigt "
+                        "wird, ein Minuszeichen eintragen."
                     ),
                     "recipient": f"kgr@{self._mail_domain}",
+                }
+            )
+
+    def check_opferzweck(self, event, report=None):
+        if not event["Opferzweck"]:
+            if report is None:
+                report = print
+            report(
+                {
+                    "message": (
+                        "Kein Opferzweck eingetragen für "
+                        f'{event["Datum"].strftime("%a., %d. %b")}, '
+                        f'{event["Uhrzeit"]}! '
+                        "Bitte einen Opferzweck eintragen, oder wenn kein Opfer "
+                        "gesammelt wird, oder kein Opferzweck benannt werden "
+                        "kann, ein Minuszeichen eintragen."
+                    ),
+                    "recipient": f"kirchenpflege@{self._mail_domain}",
                 }
             )
 
@@ -151,6 +192,40 @@ class GoDiPlanChecker:
                         "Kein Tontechniker am "
                         f'{event["Datum"].strftime("%a., %d. %b")}, '
                         f'{event["Uhrzeit"]}'
+                    ),
+                    "recipient": f"technik@{self._mail_domain}",
+                }
+            )
+
+    def check_technik_video_stream(self, event, report=None):
+        if not event["Stream u. Kamera Mischpult"]:
+            if report is None:
+                report = print
+            report(
+                {
+                    "message": (
+                        "Kein Techniker für Stream und Kamera Mischpult eingetragen am "
+                        f'{event["Datum"].strftime("%a., %d. %b")}, '
+                        f'{event["Uhrzeit"]}. '
+                        "Bitte eine Person eintragen, oder wenn niemand benötigt "
+                        "wird, ein Minuszeichen eintragen."
+                    ),
+                    "recipient": f"technik@{self._mail_domain}",
+                }
+            )
+
+    def check_technik_songbeamer(self, event, report=None):
+        if not event["Songbeamer Texte und Lieder"]:
+            if report is None:
+                report = print
+            report(
+                {
+                    "message": (
+                        "Kein Techniker für Songbeamer eingetragen am "
+                        f'{event["Datum"].strftime("%a., %d. %b")}, '
+                        f'{event["Uhrzeit"]}. '
+                        "Bitte eine Person eintragen, oder wenn niemand benötigt "
+                        "wird, ein Minuszeichen eintragen."
                     ),
                     "recipient": f"technik@{self._mail_domain}",
                 }
@@ -196,7 +271,8 @@ class GoDiPlanChecker:
                         "Gottesdienst am "
                         f"{event['Datum'].strftime('%a., %d. %b')} angelegt. "
                         f"Bitte ein Verzeichnis '{base_folder}{event_datum}' anlegen "
-                        "und den Ablauf dort ablegen!"
+                        "und den Ablauf dort ablegen! Die Datei sollte das Wort "
+                        "'Ablauf' im Namen haben."
                     ),
                     "recipient": f"webmaster@{self._mail_domain}",
                 }

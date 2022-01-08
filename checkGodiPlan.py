@@ -1,9 +1,7 @@
 import os
 import smtplib
-import subprocess
-import sys
-from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 from gottesdienstplan import GoDiPlanChecker
 

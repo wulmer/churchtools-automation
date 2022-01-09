@@ -53,12 +53,13 @@ class Mailer:
 
     def handle_check_report(self, data):
         msg = data["message"]
-        # FIXME: recp = data["recipient"]
-        recp = f"webmaster@{MAIL_DOMAIN}"
+        recp = data["recipient"]
+        cc = f"webmaster@{MAIL_DOMAIN}"
         mail = MIMEMultipart("alternative")
         mail["Subject"] = "Gottesdienstplan Checker Nachricht"
         mail["From"] = self._my_addr
         mail["To"] = recp
+        mail["Cc"] = cc
         mail.attach(MIMEText(MAIL_TEXT_TEMPLATE.format(message=msg), "plain"))
         mail.attach(MIMEText(MAIL_HTML_TEMPLATE.format(message=msg), "html"))
         self._server.send_message(

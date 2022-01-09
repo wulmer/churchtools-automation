@@ -75,6 +75,12 @@ check_godiplan: .venv/bin/pipenv
 	@.venv/bin/pip install -e . 1>/dev/null 2>&1
 	@.venv/bin/pipenv --bare run python checkGodiPlan.py
 
+.PHONY: check_old_godi_folders
+check_old_godi_folders: .venv/bin/pipenv
+	@PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install 1>/dev/null 2>&1
+	@.venv/bin/pip install -e . 1>/dev/null 2>&1
+	@.venv/bin/pipenv --bare run python checkOldGoDiFolders.py
+
 clean:
 	rm -rf .venv
 	find . -name __pycache__ -type d -exec echo rm -rf \{\} \;

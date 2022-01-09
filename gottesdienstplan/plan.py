@@ -3,13 +3,15 @@ import os
 from itertools import zip_longest
 
 import dateparser
+
 from nextcloud import NextCloud
 
 from .auth import spreadsheet_service
 
 SPREADSHEET_ID = os.environ["SPREADSHEET_ID"]
-NEXTCLOUD_USER = os.environ["NEXTCLOUD_USER"]
+NEXTCLOUD_BASE_URL = os.environ["NEXTCLOUD_BASE_URL"]
 NEXTCLOUD_TOKEN = os.environ["NEXTCLOUD_TOKEN"]
+NEXTCLOUD_USER = os.environ["NEXTCLOUD_USER"]
 
 
 class GoogleSheet:
@@ -235,7 +237,7 @@ class GoDiPlanChecker:
         if report is None:
             report = print
         nc = NextCloud(
-            webdav_url="https://nc-7380861684881042724.nextcloud-ionos.com/remote.php/dav/files/wulmer/",
+            webdav_url=f"{NEXTCLOUD_BASE_URL}/remote.php/dav/files/wulmer/",
             webdav_auth=(NEXTCLOUD_USER, NEXTCLOUD_TOKEN),
         )
         base_folder = "Gottesdienste/"

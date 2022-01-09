@@ -177,8 +177,8 @@ class GoDiPlanChecker:
                         f'{event["Datum"].strftime("%a., %d. %b")}, '
                         f'{event["Uhrzeit"]}! '
                         "Bitte einen Opferzweck eintragen, oder wenn kein Opfer "
-                        "gesammelt wird, oder kein Opferzweck benannt werden "
-                        "kann, ein Minuszeichen eintragen."
+                        "gesammelt wird oder kein Opferzweck benannt werden "
+                        "kann ein Minuszeichen eintragen."
                     ),
                     "recipient": f"kirchenpflege@{self._mail_domain}",
                 }
@@ -194,6 +194,8 @@ class GoDiPlanChecker:
                         "Kein Tontechniker am "
                         f'{event["Datum"].strftime("%a., %d. %b")}, '
                         f'{event["Uhrzeit"]}'
+                        "Bitte eine Person eintragen, oder wenn niemand benötigt "
+                        "wird, ein Minuszeichen eintragen."
                     ),
                     "recipient": f"technik@{self._mail_domain}",
                 }
@@ -255,7 +257,7 @@ class GoDiPlanChecker:
                         {
                             "message": (
                                 "Es ist noch kein Ablauf auf NextCloud für den "
-                                "Gottesdienst am "
+                                f"Gottesdienst (\"{event['Art/Anlass/Thema']}\") am "
                                 f"{event['Datum'].strftime('%a., %d. %b')} abgelegt. "
                                 f"Bitte im Verzeichnis '{base_folder}{event_datum}' "
                                 "eine Datei mit 'Ablauf' im Dateinamen ablegen! "
@@ -270,7 +272,7 @@ class GoDiPlanChecker:
                 {
                     "message": (
                         "Es ist noch kein Verzeichnis auf NextCloud für den "
-                        "Gottesdienst am "
+                        f"Gottesdienst (\"{event['Art/Anlass/Thema']}\") am "
                         f"{event['Datum'].strftime('%a., %d. %b')} angelegt. "
                         f"Bitte ein Verzeichnis '{base_folder}{event_datum}' anlegen "
                         "und den Ablauf dort ablegen! Die Datei sollte das Wort "

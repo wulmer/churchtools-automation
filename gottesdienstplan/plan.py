@@ -261,7 +261,7 @@ class GoDiPlanChecker:
                                 f"{event['Datum'].strftime('%a., %d. %b')} abgelegt. "
                                 f"Bitte im Verzeichnis '{base_folder}{event_datum}' "
                                 "eine Datei mit 'Ablauf' im Dateinamen ablegen! "
-                                "Eingetragen für Predigt ist: {event['Prediger']}"
+                                f"Eingetragen für Predigt ist: {event['Prediger']}"
                             ),
                             "recipient": f"webmaster@{self._mail_domain}",
                         }

@@ -191,9 +191,9 @@ class GoDiPlanChecker:
             report(
                 {
                     "message": (
-                        "Kein Tontechniker am "
+                        "Kein Tontechniker eingetragen am "
                         f'{event["Datum"].strftime("%a., %d. %b")}, '
-                        f'{event["Uhrzeit"]}'
+                        f'{event["Uhrzeit"]}. '
                         "Bitte eine Person eintragen, oder wenn niemand benötigt "
                         "wird, ein Minuszeichen eintragen."
                     ),

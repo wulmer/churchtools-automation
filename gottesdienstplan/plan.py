@@ -249,8 +249,10 @@ class GoDiPlanChecker:
             if folder["type"] == "directory" and folder["name"].startswith(
                 f"{base_folder}{event_datum}"
             ):
+                ablauf_exists = False
                 for file in nc.ls(folder["name"], detail=True):
                     if "ablauf" in file["name"].lower():
+                        ablauf_exists = True
                         break
                 else:
                     report(
@@ -266,7 +268,8 @@ class GoDiPlanChecker:
                             "recipient": f"webmaster@{self._mail_domain}",
                         }
                     )
-
+                if ablauf_exists:
+                    break
         else:
             report(
                 {

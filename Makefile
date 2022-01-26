@@ -8,9 +8,10 @@ help:
 	@echo "  test-our-ct-setup  Test our CT configuration"
 	@echo "  format             Format source code with black"
 	@echo "  lint               Run flake8"
+	@echo "  check_godiplan     Run the script for checking the GoDi plan"
+	@echo "  archive_godiplan   Run the script for archiving old GoDi plan entries"
 	@echo "  sync_postfix       Run the script for synching a Postfix virtual alias file"
 	@echo "  sync_mitarbeiter   Run the script for synching MA status and All-MA group"
-	@echo "  check_godiplan     Run the script for checking the GoDi plan"
 	@echo ""
 
 .venv/bin/${PYTHON}:
@@ -68,6 +69,12 @@ sync_mitarbeiter: .venv/bin/pipenv
 	@.venv/bin/pip install -e postfix_sync/src 1>/dev/null 2>&1
 	@.venv/bin/pipenv --bare run ${PYTHON} syncMitarbeiterStatus.py
 	@.venv/bin/pipenv --bare run ${PYTHON} syncAlleMitarbeiter.py
+
+.PHONY: archive_godiplan
+archive_godiplan: .venv/bin/pipenv
+	@PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install 1>/dev/null 2>&1
+	@.venv/bin/pip install -e . 1>/dev/null 2>&1
+	@.venv/bin/pipenv --bare run python archiveGodiPlan.py
 
 .PHONY: check_godiplan
 check_godiplan: .venv/bin/pipenv

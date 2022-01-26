@@ -15,26 +15,81 @@ NEXTCLOUD_USER = os.environ["NEXTCLOUD_USER"]
 
 
 class GoogleSheet:
-    def __init__(self, sheet_id, table_name, last_column="P"):
+    def __init__(self, spreadsheet_id, table_name, last_column="P"):
         self._sheets = spreadsheet_service.spreadsheets()
         self._values = self._sheets.values()
-        self._sheetid = sheet_id
+        self._spreadsheet_id = spreadsheet_id
         self._table_name = table_name
+        self._sheet_id = None
+        spreadsheet = self._sheets.get(spreadsheetId=self._spreadsheet_id).execute()
+        for sheet in spreadsheet["sheets"]:
+            if sheet["properties"]["title"] == self._table_name:
+                self._sheet_id = sheet["properties"]["sheetId"]
+                break
+        else:
+            raise ValueError(
+                f"Could not get sheet id of '{table_name}. Is the name correct?"
+            )
         self._last_column = last_column
 
     def get(self):
-        return self._sheets.get(spreadsheetId=self._sheetid).execute()
+        return self._sheets.get(spreadsheetId=self._spreadsheet_id).execute()
 
     def get_rows_values(self, n_rows=30, skip_rows=0):
         row_range = (
             f"{self._table_name}!A{skip_rows+1}:{self._last_column}{skip_rows+n_rows}"
         )
         return self._values.get(
-            spreadsheetId=self._sheetid,
+            spreadsheetId=self._spreadsheet_id,
             range=row_range,
             dateTimeRenderOption="FORMATTED_STRING",
             valueRenderOption="FORMATTED_VALUE",
         ).execute()["values"]
+
+    def insert_row(self, row, before_row: int = 1):
+        result = self._sheets.batchUpdate(
+            spreadsheetId=self._spreadsheet_id,
+            body={
+                "requests": [
+                    {
+                        "insertDimension": {
+                            "range": {
+                                "sheetId": self._sheet_id,
+                                "dimension": "ROWS",
+                                "startIndex": before_row - 1,
+                                "endIndex": before_row,
+                            }
+                        }
+                    }
+                ]
+            },
+        ).execute()
+        result = self._values.append(
+            spreadsheetId=self._spreadsheet_id,
+            range=self._table_name + "!A" + str(before_row),
+            valueInputOption="USER_ENTERED",
+            body={"values": [row]},
+        ).execute()
+        return result.get("updates").get("updatedRows") == 1
+
+    def delete_row(self, row_index: int):
+        self._sheets.batchUpdate(
+            spreadsheetId=self._spreadsheet_id,
+            body={
+                "requests": [
+                    {
+                        "deleteDimension": {
+                            "range": {
+                                "sheetId": self._sheet_id,
+                                "dimension": "ROWS",
+                                "startIndex": row_index - 1,
+                                "endIndex": row_index,
+                            }
+                        }
+                    }
+                ]
+            },
+        ).execute()
 
 
 class Gottesdienstplan:
@@ -48,6 +103,7 @@ class Gottesdienstplan:
         return self._headers
 
     def iter_rows(self, starting_row=3):
+        assert starting_row >= 1
         i = starting_row - 1
         while True:
             yield self._sheet.get_rows_values(1, skip_rows=i)[0]

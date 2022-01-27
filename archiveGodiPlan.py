@@ -13,6 +13,8 @@ if __name__ == "__main__":
     archive = GoogleSheet(SPREADSHEET_ID, "Archiv")
     rows_to_delete = []
     starting_row = 3
+    now = datetime.datetime.today()
+    yesterday = now - datetime.timedelta(days=1)
     for index, row in enumerate(plan.iter_rows(starting_row=starting_row)):
         try:
             date = dateparser.parse(row[0])
@@ -20,7 +22,7 @@ if __name__ == "__main__":
             print(f"Could not parse date value in row {starting_row+index}")
             raise
 
-        if date > datetime.datetime.now():
+        if date >= yesterday:
             break
 
         if archive.insert_row(row, before_row=2):

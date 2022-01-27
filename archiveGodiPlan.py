@@ -26,6 +26,12 @@ if __name__ == "__main__":
         if archive.insert_row(row, before_row=2):
             rows_to_delete.append(starting_row + index)
 
+    if len(rows_to_delete) > 1:
+        raise RuntimeError(
+            "Not going to delete more than one row in automatic"
+            "mode. Run this script manually to perform this operation!"
+        )
+
     for row_index in rows_to_delete[::-1]:
         print(f"Deleting row {row_index} with values:")
         print(plan._sheet.get_rows_values(n_rows=1, skip_rows=row_index - 1))

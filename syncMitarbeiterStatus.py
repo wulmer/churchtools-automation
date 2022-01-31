@@ -49,7 +49,7 @@ if __name__ == "__main__":
         print(f"Upgrading persons to '{DEFAULT_MITARBEITER_STATUS}' status:")
         for p in should_have_member_status:
             print(
-                f"- #{p}\thttps://elkw2806.church.tools/?q=churchdb#/PersonView/searchEntry:%23{p}/"
+                f"- #{p}\thttps://elkw2806.krz.tools/?q=churchdb#/PersonView/searchEntry:%23{p}/"
             )
             api.set_person_status(p, status_ids[DEFAULT_MITARBEITER_STATUS])
     if should_not_have_member_status:
@@ -63,6 +63,6 @@ if __name__ == "__main__":
                 print(f"- Not removing protected person #{p}")
                 continue
             print(
-                f"- #{p}\thttps://elkw2806.church.tools/?q=churchdb#/PersonView/searchEntry:%23{p}/"
+                f"- #{p}\thttps://elkw2806.krz.tools/?q=churchdb#/PersonView/searchEntry:%23{p}/"
             )
             api.set_person_status(p, status_ids[EX_MITARBEITER_STATUS])

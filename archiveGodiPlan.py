@@ -28,9 +28,9 @@ if __name__ == "__main__":
         if archive.insert_row(row, before_row=2):
             rows_to_delete.append(starting_row + index)
 
-    if len(rows_to_delete) > 1:
+    if len(rows_to_delete) > 2:
         raise RuntimeError(
-            "Not going to delete more than one row in automatic"
+            "Not going to delete more than two rows in automatic"
             "mode. Run this script manually to perform this operation!"
         )
 

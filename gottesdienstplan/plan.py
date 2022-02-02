@@ -99,7 +99,9 @@ class Gottesdienstplan:
 
     def get_headers(self):
         if self._headers is None:
-            self._headers = self._sheet.get_rows_values(1, skip_rows=1)[0]
+            self._headers = [
+                h.strip() for h in self._sheet.get_rows_values(1, skip_rows=1)[0]
+            ]
         return self._headers
 
     def iter_rows(self, starting_row=3):
@@ -126,9 +128,13 @@ class Gottesdienstplan:
             if in_future:
                 yield row_data
             else:
-                if row_data["Datum"] > datetime.datetime.now():
-                    in_future = True
-                    yield row_data
+                try:
+                    if row_data["Datum"] > datetime.datetime.now():
+                        in_future = True
+                        yield row_data
+                except KeyError:
+                    print(f"Could not parse date for {row_data}")
+                    raise
 
     def iter_next_future_events(self, *, num: int = None, span: str = None):
         if num is not None:

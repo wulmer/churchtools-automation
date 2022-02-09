@@ -23,9 +23,9 @@ help:
 setup: .venv_is_uptodate
 
 .venv_is_uptodate: .venv/bin/pipenv Pipfile.lock
-	PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv install --dev
-	.venv/bin/pip install -e .
-	.venv/bin/pip install -e postfix_sync/src
+	PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install --dev
+	.venv/bin/pip install -qq -e .
+	.venv/bin/pip install -qq -e postfix_sync/src
 	touch .venv_is_uptodate
 
 Pipfile.lock: Pipfile
@@ -45,49 +45,40 @@ test: .venv/bin/pipenv .venv/bin/pytest
 		--cov-report term-missing \
 		${PYTEST_ARGS} -v postfix_sync/tests
 
+.PHONY: test-our-ct-setup
 test-our-ct-setup: .venv/bin/pipenv .venv/bin/pytest
 	.venv/bin/pytest \
 		${PYTEST_ARGS} -v our_churchtools_setup/tests
 
+.PHONY: format
 format: .venv/bin/pipenv .venv/bin/black
 	.venv/bin/pipenv run black .
 
+.PHONY: lint
 lint: .venv/bin/pipenv .venv/bin/flake8
 	.venv/bin/pipenv run flake8 *.py tests churchtools postfix_sync
 
 .PHONY: sync_postfix
-sync_postfix: .venv/bin/pipenv
-	@PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install 1>/dev/null 2>&1
-	@.venv/bin/pip install -e . 1>/dev/null 2>&1
-	@.venv/bin/pip install -e postfix_sync/src 1>/dev/null 2>&1
+sync_postfix: .venv_is_uptodate
 	@.venv/bin/pipenv --bare run ${PYTHON} syncPostfixAliases.py
 
 .PHONY: sync_mitarbeiter
-sync_mitarbeiter: .venv/bin/pipenv
-	@PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install 1>/dev/null 2>&1
-	@.venv/bin/pip install -e . 1>/dev/null 2>&1
-	@.venv/bin/pip install -e postfix_sync/src 1>/dev/null 2>&1
+sync_mitarbeiter: .venv_is_uptodate
 	@.venv/bin/pipenv --bare run ${PYTHON} syncMitarbeiterStatus.py
 	@.venv/bin/pipenv --bare run ${PYTHON} syncAlleMitarbeiter.py
 
 .PHONY: archive_godiplan
-archive_godiplan: .venv/bin/pipenv
-	@PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install 1>/dev/null 2>&1
-	@.venv/bin/pip install -e . 1>/dev/null 2>&1
+archive_godiplan: .venv_is_uptodate
 	@.venv/bin/pipenv --bare run python archiveGodiPlan.py
 
 .PHONY: check_godiplan
-check_godiplan: .venv/bin/pipenv
-	@PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install 1>/dev/null 2>&1
-	@.venv/bin/pip install -e . 1>/dev/null 2>&1
+check_godiplan: .venv_is_uptodate
 	@.venv/bin/pipenv --bare run python checkGodiPlan.py
 
 .PHONY: check_old_godi_folders
-check_old_godi_folders: .venv/bin/pipenv
-	@PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install 1>/dev/null 2>&1
-	@.venv/bin/pip install -e . 1>/dev/null 2>&1
+check_old_godi_folders: .venv_is_uptodate
 	@.venv/bin/pipenv --bare run python checkOldGoDiFolders.py
 
 clean:
 	rm -rf .venv
-	find . -name __pycache__ -type d -exec echo rm -rf \{\} \;
+	find . -name __pycache__ -type d -exec rm -rf \{\} \;

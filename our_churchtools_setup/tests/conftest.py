@@ -200,6 +200,8 @@ def there_should_be_only_public_search_results(search_result, user):
             if "securityLevelForGroup" in result:
                 if result["settings"]["isPublic"]:
                     continue  # public groups in search results are OK
+                if result["settings"]["isOpenForMembers"]:
+                    continue  # open groups in search results are OK
             raise AssertionError("There should be no private search results!")
     except requests.HTTPError as e:
         assert e.response.status_code in (401, 403)

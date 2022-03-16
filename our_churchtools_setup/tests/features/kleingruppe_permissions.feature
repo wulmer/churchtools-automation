@@ -34,3 +34,10 @@ Feature: User permissions in a 'Kleingruppe'
         When the user searches for other persons of that group
         Then the user should not see other persons
 
+    Scenario: 'Leiter' users in a 'Kleingruppe' group can create new persons in ChurchTools
+        Given all users who are 'Leiter' of a 'Kleingruppe' group
+        Then all those users should have the right to create new persons
+    
+    Scenario: 'Leiter' users in a 'Kleingruppe' group can invite persons to ChurchTools
+        Given all users who are 'Leiter' of a 'Kleingruppe' group
+        Then all those users should have the right to invite a person to ChurchTools

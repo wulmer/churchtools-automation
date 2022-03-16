@@ -1,7 +1,7 @@
 import os
 import re
 from itertools import chain
-from typing import List
+from typing import List, Set
 
 import pytest
 import requests
@@ -66,7 +66,7 @@ def no_group_user(api: ChurchToolsApi, request):
 )
 def all_users_who_are_role_of_a_group(
     api: ChurchToolsApi, group_role, group_type
-) -> List[dict]:
+) -> Set[int]:
     group_type_id = api.get_id_of_group_type(group_type)
     role_id = api.get_id_of_group_role(group_type_id, group_role)
     groups = api.get_groups(group_type_ids=[group_type_id])
@@ -208,9 +208,7 @@ def there_should_be_only_public_search_results(search_result, user):
 
 
 @then("the user should only see members of that group")
-def the_user_should_only_see_members_of_that_group(
-    api: ChurchToolsApi, user, search_result, make_user_api
-):
+def the_user_should_only_see_members_of_that_group(user, search_result, make_user_api):
     user_api = make_user_api(user["id"])
     memberships = user_api.get_memberships(user["id"])
     assert (
@@ -277,6 +275,26 @@ def the_user_should_have_the_permission_to_edit_other_persons_details(
             continue  # no need to check seeing one's own details
         permissions = user_api.get_person_permissions(other_person_id)
         assert permissions["churchdb"]["+edit persons"]
+
+
+@then("all those users should have the right to create new persons")
+def all_those_user_should_have_the_right_to_create_new_persons(
+    search_result, make_user_api
+):
+    for user_id in search_result:
+        user_api: ChurchToolsApi = make_user_api(user_id)
+        permissions = user_api.get_global_permissions()
+        assert permissions["churchdb"]["create person"]
+
+
+@then("all those users should have the right to invite a person to ChurchTools")
+def all_those_user_should_have_the_right_to_invite_a_person_to_churchtools(
+    search_result, make_user_api
+):
+    for user_id in search_result:
+        user_api: ChurchToolsApi = make_user_api(user_id)
+        permissions = user_api.get_global_permissions()
+        assert permissions["churchcore"]["invite persons"]
 
 
 @then("the user should see all non-hidden groups")

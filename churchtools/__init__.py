@@ -162,6 +162,11 @@ class ChurchToolsApi:
         ):
             yield member
 
+    def get_global_permissions(self) -> dict:
+        response = self._session.get(self._base_url + "/permissions/global")
+        response.raise_for_status()
+        return response.json()["data"]
+
     def get_person_permissions(self, other_person_id: int) -> dict:
         response = self._session.get(
             self._base_url + f"/permissions/internal/persons/{other_person_id}"

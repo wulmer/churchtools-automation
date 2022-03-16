@@ -22,3 +22,11 @@ Feature: User permissions in a 'Dienst' group
         Given a user who is 'zu löschen' of one 'Dienst' group
         When the user searches for other persons of that group
         Then the user should not see other persons
+
+    Scenario: 'Leiter' users in a 'Dienst' group can create new persons in ChurchTools
+        Given all users who are 'Leiter' of a 'Dienst' group
+        Then all those users should have the right to create new persons
+    
+    Scenario: 'Leiter' users in a 'Dienst' group can invite persons to ChurchTools
+        Given all users who are 'Leiter' of a 'Dienst' group
+        Then all those users should have the right to invite a person to ChurchTools

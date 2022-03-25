@@ -7,7 +7,7 @@ from churchtools import ChurchToolsApi
 MITARBEITER_GROUP_ROLES = {
     "Dienst": {"Leiter", "Mitarbeiter"},
     "Gremium/Ausschuss": {"Vorsitz", "Stellv. Vorsitz", "Mitglieder"},
-    "Kleingruppe": {"Leiter", "Teamer"},
+    "Kleingruppe": {"Leiter"},
 }
 
 PROTECTED_STATUS = "Mitarbeiter (HA)"

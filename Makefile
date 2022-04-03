@@ -18,7 +18,7 @@ help:
 	${PYTHON} -m venv .venv
 
 .venv/bin/pipenv: .venv/bin/${PYTHON}
-	.venv/bin/pip install pipenv
+	.venv/bin/pip install pipenv -qq
 
 setup: .venv_is_uptodate
 

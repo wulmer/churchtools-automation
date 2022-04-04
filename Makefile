@@ -18,7 +18,7 @@ help:
 	${PYTHON} -m venv .venv
 
 .venv/bin/pipenv: .venv/bin/${PYTHON}
-	.venv/bin/pip install pipenv -qq
+	@.venv/bin/pip install pipenv -qq
 
 setup: .venv_is_uptodate
 
@@ -47,16 +47,16 @@ test: .venv/bin/pipenv .venv/bin/pytest
 
 .PHONY: test-our-ct-setup
 test-our-ct-setup: .venv/bin/pipenv .venv/bin/pytest
-	.venv/bin/pytest \
+	@.venv/bin/pytest \
 		${PYTEST_ARGS} -v our_churchtools_setup/tests
 
 .PHONY: format
 format: .venv/bin/pipenv .venv/bin/black
-	.venv/bin/pipenv run black .
+	@.venv/bin/pipenv run black .
 
 .PHONY: lint
 lint: .venv/bin/pipenv .venv/bin/flake8
-	.venv/bin/pipenv run flake8 *.py tests churchtools postfix_sync
+	@.venv/bin/pipenv run flake8 *.py tests churchtools postfix_sync
 
 .PHONY: sync_postfix
 sync_postfix: .venv_is_uptodate

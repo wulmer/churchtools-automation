@@ -247,6 +247,25 @@ def the_user_should_see_all_members_of_that_group(
     assert users_result_ids == global_result_ids
 
 
+@then(
+    parsers.parse(
+        "all those users should have the right to see person data of security level {level:d}"
+    )
+)
+def all_those_users_should_have_the_right_to_see_person_data_of_security_level_x(
+    search_result, make_user_api, level
+):
+    for user_id in search_result:
+        user_api: ChurchToolsApi = make_user_api(user_id)
+        permissions = user_api.get_global_permissions()
+        active_level = permissions["churchdb"]["security level person"]
+        print(active_level)
+        assert active_level[0] >= level, (
+            f"User #{user_id} can only see level {active_level} "
+            f"of person details instead of level {level}"
+        )
+
+
 @then(parsers.parse("the user should only see up to level {level:d} details"))
 def the_user_should_only_see_up_to_level_details(
     api: ChurchToolsApi, user, search_result, make_user_api, level

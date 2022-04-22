@@ -26,7 +26,9 @@ Feature: User permissions in a 'Dienst' group
     Scenario: 'Leiter' users in a 'Dienst' group can create new persons in ChurchTools
         Given all users who are 'Leiter' of a 'Dienst' group
         Then all those users should have the right to create new persons
+        And all those users should have the right to see person data of security level 1
     
     Scenario: 'Leiter' users in a 'Dienst' group can invite persons to ChurchTools
         Given all users who are 'Leiter' of a 'Dienst' group
         Then all those users should have the right to invite a person to ChurchTools
+        And all those users should have the right to see person data of security level 1

@@ -28,3 +28,23 @@ Feature: User permissions in a 'Gremium'
         Given a user who is 'zu löschen' of one 'Gremium/Ausschuss' group
         When the user searches for other persons of that group
         Then the user should not see other persons
+    
+    Scenario: 'Vorsitz' users in a 'Gremium/Ausschuss' group can create new persons in ChurchTools
+        Given all users who are 'Vorsitz' of a 'Gremium/Ausschuss' group
+        Then all those users should have the right to create new persons
+        And all those users should have the right to see person data of security level 1
+    
+    Scenario: 'Vorsitz' users in a 'Gremium/Ausschuss' group can invite persons to ChurchTools
+        Given all users who are 'Vorsitz' of a 'Gremium/Ausschuss' group
+        Then all those users should have the right to invite a person to ChurchTools
+        And all those users should have the right to see person data of security level 1
+
+    Scenario: 'Stellv. Vorsitz' users in a 'Gremium/Ausschuss' group can create new persons in ChurchTools
+        Given all users who are 'Stellv. Vorsitz' of a 'Gremium/Ausschuss' group
+        Then all those users should have the right to create new persons
+        And all those users should have the right to see person data of security level 1
+    
+    Scenario: 'Stellv. Vorsitz' users in a 'Gremium/Ausschuss' group can invite persons to ChurchTools
+        Given all users who are 'Stellv. Vorsitz' of a 'Gremium/Ausschuss' group
+        Then all those users should have the right to invite a person to ChurchTools
+        And all those users should have the right to see person data of security level 1

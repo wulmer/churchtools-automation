@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "172cd00168dc2d1557f7e8058f438cda93c8db5ccb3c001d33a466387674ed93"
+            "sha256": "f96f64639429f1d314e0a0f3e0b0de5f0b908fefa10fe5fa996818742143551f"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -74,6 +74,14 @@
             ],
             "index": "pypi",
             "version": "==1.1.1"
+        },
+        "deepdiff": {
+            "hashes": [
+                "sha256:6b71714a6a5fb4cd6ab74c97f53303029118f96128082422342a9129a5f25c8f",
+                "sha256:7e641c0cd6429c9e1b64a07b8f7713382a5626afe18c72bcafa8a4343c05c701"
+            ],
+            "index": "pypi",
+            "version": "==5.8.0"
         },
         "fsspec": {
             "hashes": [
@@ -162,6 +170,14 @@
             ],
             "markers": "python_version >= '3'",
             "version": "==3.3"
+        },
+        "ordered-set": {
+            "hashes": [
+                "sha256:046e1132c71fcf3330438a539928932caf51ddbc582496833e23de611de14562",
+                "sha256:694a8e44c87657c59292ede72891eb91d34131f6531463aab3009191c77364a8"
+            ],
+            "markers": "python_version >= '3.7'",
+            "version": "==4.1.0"
         },
         "protobuf": {
             "hashes": [
@@ -774,7 +790,7 @@
                 "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
                 "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
-            "markers": "python_version < '3.11'",
+            "markers": "python_version >= '3.7'",
             "version": "==2.0.1"
         },
         "types-requests": {
@@ -797,7 +813,7 @@
                 "sha256:6657594ee297170d19f67d55c05852a874e7eb634f4f753dbd667855e07c1708",
                 "sha256:f1c24655a0da0d1b67f07e17a5e6b2a105894e6824b92096378bb3668ef02376"
             ],
-            "markers": "python_version < '3.10'",
+            "markers": "python_version >= '3.7'",
             "version": "==4.2.0"
         }
     }

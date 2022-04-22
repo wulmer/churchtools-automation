@@ -79,6 +79,10 @@ check_godiplan: .venv_is_uptodate
 check_old_godi_folders: .venv_is_uptodate
 	@.venv/bin/pipenv --bare run python checkOldGoDiFolders.py
 
+.PHONY: check_ldap
+check_ldap: .venv_is_uptodate
+	@.venv/bin/pipenv --bare run python checkLDAP.py
+
 clean:
 	rm -rf .venv
 	find . -name __pycache__ -type d -exec rm -rf \{\} \;

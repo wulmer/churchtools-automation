@@ -115,7 +115,7 @@ class Gottesdienstplan:
         headers = self.get_headers()
         for values in self.iter_rows(starting_row=starting_row):
             try:
-                date = dateparser.parse(values[0])
+                date = dateparser.parse(values[0], settings={"TIMEZONE": "CET"})
                 values[0] = date
             except ValueError:
                 pass
@@ -129,7 +129,7 @@ class Gottesdienstplan:
                 yield row_data
             else:
                 try:
-                    if row_data["Datum"] > datetime.datetime.now():
+                    if row_data["Datum"] > datetime.datetime.today():
                         in_future = True
                         yield row_data
                 except KeyError:

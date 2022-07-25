@@ -1,6 +1,7 @@
 import datetime
 import os
 import re
+import sys
 
 from nextcloud import NextCloud
 
@@ -37,7 +38,7 @@ if __name__ == "__main__":
         webdav_auth=(NEXTCLOUD_USER, NEXTCLOUD_TOKEN),
     )
     base_folder = "Gottesdienste/"
-    archive_folder = f"{base_folder}Archiv"
+    archive_folder = f"{base_folder}Archiv/"
     weeks = 1
     outdated_folders = find_outdated_folders(nc, base_folder, weeks=weeks)
     for outdated_folder in outdated_folders:
@@ -50,9 +51,8 @@ if __name__ == "__main__":
             archive_folder,
         )
 
-    base_folder = "Gottesdienste/Archiv"
-    weeks = 14
-    outdated_folders = find_outdated_folders(nc, base_folder, weeks=weeks)
+    weeks = 20
+    outdated_folders = find_outdated_folders(nc, archive_folder, weeks=weeks)
     for outdated_folder in outdated_folders:
         print(
             f"Das Gottesdienstverzeichnis '{outdated_folder}' "
@@ -60,5 +60,7 @@ if __name__ == "__main__":
             "(noch nicht wirklich) gelöscht."
         )
         # nc.rm(
-        #     outdated_folder,
+        #    outdated_folder,
         # )
+    if outdated_folders:
+        sys.exit(1)

@@ -57,10 +57,11 @@ if __name__ == "__main__":
         print(
             f"Das Gottesdienstverzeichnis '{outdated_folder}' "
             f"ist älter als {weeks} Woche(n) und wird jetzt "
-            "(noch nicht wirklich) gelöscht."
+            "gelöscht."
         )
-        # nc.rm(
-        #    outdated_folder,
-        # )
+        nc.rm(
+            outdated_folder,
+        )
+        break  # just one at a time
     if outdated_folders:
         sys.exit(1)

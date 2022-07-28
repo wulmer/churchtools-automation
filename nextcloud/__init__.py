@@ -23,5 +23,5 @@ class NextCloud:
         return self._fs.mv(src, str(dest_path), recursive=True)
 
     def rm(self, path: str, recursive: bool = False):
-        print(f"(Not) Deleting {path} with recursive={recursive}")
-        # return self._fs.rm(path, recursive=recursive)
+        print(f"Deleting {path} with recursive={recursive}")
+        return self._fs.rm(path, recursive=recursive)

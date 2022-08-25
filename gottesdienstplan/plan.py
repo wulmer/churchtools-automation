@@ -1,6 +1,7 @@
 import datetime
 import os
 from itertools import zip_longest
+from typing import Generator, List
 
 import dateparser
 
@@ -104,7 +105,7 @@ class Gottesdienstplan:
             ]
         return self._headers
 
-    def iter_rows(self, starting_row=3):
+    def iter_rows(self, starting_row=3) -> Generator[List[str], None, None]:
         assert starting_row >= 1
         i = starting_row - 1
         while True:
@@ -115,10 +116,14 @@ class Gottesdienstplan:
         headers = self.get_headers()
         for values in self.iter_rows(starting_row=starting_row):
             try:
-                date = dateparser.parse(values[0], settings={"TIMEZONE": "CET"})
+                date = dateparser.parse(
+                    values[0], settings={"TIMEZONE": "CET"}, languages=["de"]
+                )
+                if date is None:
+                    raise ValueError(f"Invalid 'Datum': {values[0]}")
                 values[0] = date
             except ValueError:
-                pass
+                raise ValueError(f"Invalid 'Datum': {values[0]}")
             yield dict(zip_longest(headers, values, fillvalue=None))
 
     def iter_future_events(self):

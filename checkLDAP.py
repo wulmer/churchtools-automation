@@ -36,6 +36,7 @@ def check_nextcloud_settings():
         },
         params={"format": "json"},
     )
+    response.raise_for_status()
     LDAP_SUBDOMAIN = os.environ["LDAP_SUBDOMAIN"]
     ldap_config = response.json()["ocs"]["data"]
     expected_config = {

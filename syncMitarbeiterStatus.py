@@ -27,8 +27,8 @@ if __name__ == "__main__":
             api.get_id_of_group_role(group_type_id, group_role)
             for group_role in MITARBEITER_GROUP_ROLES[group_type]
         ]
-        groups = api.get_groups(group_type_ids=[group_type_id])
-        for group in groups:
+        active_groups = api.get_groups(group_type_ids=[group_type_id])
+        for group in active_groups:
             members = api.get_group_members(group["id"], role_ids=role_ids)
             for member in members:
                 members_from_roles.add(member["personId"])

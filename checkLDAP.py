@@ -70,7 +70,7 @@ def check_nextcloud_settings():
         "ldapGroupFilterObjectclass": "",
         "ldapGroupMemberAssocAttr": "uniqueMember",
         "ldapHost": "ldaps://ldap.church.tools",
-        "ldapIgnoreNamingRules": False,
+        "ldapIgnoreNamingRules": "",
         "ldapLoginFilter": f"(&(&(|(objectclass=CTPerson))(|(memberof=cn=auto-gruppe: alle mitarbeiter,ou=groups,o={LDAP_SUBDOMAIN})))(|(uid=%uid)(|(mailPrimaryAddress=%uid)(mail=%uid))))",
         "ldapLoginFilterAttributes": "",
         "ldapLoginFilterEmail": "1",

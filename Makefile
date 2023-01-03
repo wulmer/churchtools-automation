@@ -25,8 +25,8 @@ setup: .venv_is_uptodate
 
 .venv_is_uptodate: .venv/bin/pipenv Pipfile.lock
 	PIPENV_VENV_IN_PROJECT=1 .venv/bin/pipenv --bare install --dev
-	.venv/bin/pip install -qq -e .
-	.venv/bin/pip install -qq -e postfix_sync/src
+	.venv/bin/${PYTHON} -m pip install -qq -e .
+	.venv/bin/${PYTHON} -m pip install -qq -e postfix_sync/src
 	touch .venv_is_uptodate
 
 Pipfile.lock: Pipfile

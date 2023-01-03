@@ -9,6 +9,7 @@ help:
 	@echo "  format             Format source code with black"
 	@echo "  lint               Run flake8"
 	@echo "  check_godiplan     Run the script for checking the GoDi plan"
+	@echo "  check_ldap         Run the script for checking the LDAP settings"
 	@echo "  archive_godiplan   Run the script for archiving old GoDi plan entries"
 	@echo "  sync_postfix       Run the script for synching a Postfix virtual alias file"
 	@echo "  sync_mitarbeiter   Run the script for synching MA status and All-MA group"

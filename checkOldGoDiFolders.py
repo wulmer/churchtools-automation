@@ -23,9 +23,13 @@ def find_outdated_folders(nc, base_folder, weeks):
         if item["type"] == "directory" and re.match(
             f"^{base_folder}" + r"\d{4}-\d{2}-\d{2}.*$", item["name"]
         ):
-            foldername_date = datetime.datetime.strptime(
-                item["name"][len(base_folder) : len(base_folder) + 10], "%Y-%m-%d"
-            ).replace(tzinfo=datetime.timezone.utc)
+            try:
+                foldername_date = datetime.datetime.strptime(
+                    item["name"][len(base_folder) : len(base_folder) + 10], "%Y-%m-%d"
+                ).replace(tzinfo=datetime.timezone.utc)
+            except:
+                print(f"Could not parse date of folder name: {item['name']}!")
+                raise
             folder_date = item["modified"]
             if foldername_date < x_weeks_ago and folder_date < x_weeks_ago:
                 outdated_folders.append(item["name"])

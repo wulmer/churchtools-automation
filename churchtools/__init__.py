@@ -30,10 +30,10 @@ class ChurchToolsApi:
         return int(filtered_group_types[0]["id"])
 
     @cache
-    def get_id_of_group_role(self, group_type_id: int, group_role: str):
-        response = self._session.get(self._base_url + "/masterdata/person/roles")
+    def get_id_of_group_role(self, group_type_id: int, group_role: str) -> int:
+        response = self._session.get(self._base_url + "/person/masterdata")
         response.raise_for_status()
-        roles = response.json()["data"]
+        roles = response.json()["data"]["roles"]
         filtered_roles = list(
             filter(
                 lambda r: r["groupTypeId"] == group_type_id and r["name"] == group_role,

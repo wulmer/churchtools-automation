@@ -30,6 +30,7 @@ if __name__ == "__main__":
         "Musik-Team": "musikteam-list@johanneskirche-rutesheim.de",
         "Mesner": "mesner-list@johanneskirche-rutesheim.de",
         "Netzwerktreffen": "netzwerktreffen-list@johanneskirche-rutesheim.de",
+        "Welcome-Team": "welcometeam-list@johanneskirche-rutesheim.de",
     }
 
     has_updates = False
@@ -57,7 +58,7 @@ if __name__ == "__main__":
             PostMap.normalize_email(e) for e in postmap.get_recepients_for_alias(alias)
         ]
         if set(recipients) == set(recipients_in_db):
-            #print(f"Nothing to do for group '{group_ctname}'")
+            # print(f"Nothing to do for group '{group_ctname}'")
             continue
         to_add = set(recipients) - set(recipients_in_db)
         to_remove = set(recipients_in_db) - set(recipients)

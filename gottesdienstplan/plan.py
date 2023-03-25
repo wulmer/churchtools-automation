@@ -1,7 +1,7 @@
 import datetime
 import os
 from itertools import zip_longest
-from typing import Generator, List
+from typing import Generator, List, Optional
 
 import dateparser
 
@@ -16,7 +16,7 @@ NEXTCLOUD_USER = os.environ["NEXTCLOUD_USER"]
 
 
 class GoogleSheet:
-    def __init__(self, spreadsheet_id, table_name, last_column="P"):
+    def __init__(self, spreadsheet_id, table_name, last_column="Q"):
         self._sheets = spreadsheet_service.spreadsheets()
         self._values = self._sheets.values()
         self._spreadsheet_id = spreadsheet_id
@@ -165,7 +165,7 @@ class Gottesdienstplan:
 
 
 class GoDiPlanChecker:
-    def __init__(self, mail_domain: str = None):
+    def __init__(self, mail_domain: Optional[str] = None):
         self._plan = Gottesdienstplan()
         self._mail_domain = mail_domain
 

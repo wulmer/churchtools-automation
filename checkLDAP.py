@@ -54,6 +54,7 @@ def check_nextcloud_settings():
         "ldapBaseUsers": f"ou=users,o={LDAP_SUBDOMAIN}",
         "ldapCacheTTL": "600",
         "ldapConfigurationActive": "1",
+        "ldapConnectionTimeout": "15",
         "ldapDefaultPPolicyDN": "",
         "ldapDynamicGroupMemberURL": "",
         "ldapEmailAttribute": "mail",

@@ -178,7 +178,7 @@ class GoDiPlanChecker:
             self.check_technik_ton_kirche(event, report=report)
             self.check_technik_video_stream(event, report=report)
             self.check_technik_songbeamer(event, report=report)
-            self.check_for_nextcloud_folder_and_ablauf(event, report=report)
+            #self.check_for_nextcloud_folder_and_ablauf(event, report=report)
 
     def check_basics(self, event, reporter=None):
         if (

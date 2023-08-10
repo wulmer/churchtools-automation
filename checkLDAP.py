@@ -47,6 +47,8 @@ def check_nextcloud_settings():
         "ldapAgentPassword": "***",
         "ldapAttributesForGroupSearch": "",
         "ldapAttributesForUserSearch": "",
+        "ldapBackgroundHost": "",
+        "ldapBackgroundPort": "",
         "ldapBackupHost": "",
         "ldapBackupPort": "",
         "ldapBase": f"ou=users,o={LDAP_SUBDOMAIN}",

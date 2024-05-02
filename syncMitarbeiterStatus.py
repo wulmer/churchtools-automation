@@ -5,9 +5,10 @@ from churchtools import ChurchToolsApi
 # the following list defines all roles for groups which should
 # be treated as 'Mitarbeiter'
 MITARBEITER_GROUP_ROLES = {
+    "Kleingruppe": {"Leiter"},
     "Dienst": {"Leiter", "Mitarbeiter"},
     "Gremium/Ausschuss": {"Vorsitz", "Stellv. Vorsitz", "Mitglieder"},
-    "Kleingruppe": {"Leiter"},
+    "Orga-Gruppe": {"Leiter"},
 }
 
 PROTECTED_STATUS = "Mitarbeiter (HA)"

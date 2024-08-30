@@ -106,6 +106,7 @@ def check_nextcloud_settings():
         "ldapUserFilterObjectclass": "CTPerson",
         "ldapUuidGroupAttribute": "auto",
         "ldapUuidUserAttribute": "auto",
+        "markRemnantsAsDisabled": "0",
         "turnOffCertCheck": "0",
         "turnOnPasswordChange": "0",
         "useMemberOfToDetectMembership": "1",

@@ -9,6 +9,7 @@ help:
 	@echo "  format             Format source code with black"
 	@echo "  lint               Run flake8"
 	@echo "  check_godiplan     Run the script for checking the GoDi plan"
+	@echo "  check_old_godi_folders  Archive old folders on NextCloud"
 	@echo "  check_ldap         Run the script for checking the LDAP settings"
 	@echo "  archive_godiplan   Run the script for archiving old GoDi plan entries"
 	@echo "  sync_postfix       Run the script for synching a Postfix virtual alias file"

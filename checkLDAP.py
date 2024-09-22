@@ -60,7 +60,7 @@ def check_nextcloud_settings():
         "ldapBackgroundHost": "",
         "ldapBackgroundPort": "",
         "ldapBackupHost": "",
-        "ldapBackupPort": "",
+        "ldapBackupPort": "636",
         "ldapBase": f"ou=users,o={LDAP_SUBDOMAIN}",
         "ldapBaseGroups": f"ou=groups,o={LDAP_SUBDOMAIN}",
         "ldapBaseUsers": f"ou=users,o={LDAP_SUBDOMAIN}",

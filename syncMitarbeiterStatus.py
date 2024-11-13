@@ -1,3 +1,4 @@
+import argparse
 import os
 
 from churchtools import ChurchToolsApi
@@ -18,6 +19,16 @@ DEFAULT_MITARBEITER_STATUS = "Mitarbeiter (EA)"
 EX_MITARBEITER_STATUS = "Ehemalige MA"
 
 if __name__ == "__main__":
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Do not change anything, just print what would be done",
+    )
+    args = arg_parser.parse_args()
+    if args.dry_run:
+        print("==== DRY RUN ====")
+
     api = ChurchToolsApi(os.environ["API_BASE_URL"], os.environ["ADMIN_TOKEN"])
     status_ids = api.get_status_ids()
 
@@ -52,7 +63,8 @@ if __name__ == "__main__":
             print(
                 f"- #{p}\t{os.environ['CT_BASE_URL']}?q=churchdb#/PersonView/searchEntry:%23{p}/"
             )
-            api.set_person_status(p, status_ids[DEFAULT_MITARBEITER_STATUS])
+            if not args.dry_run:
+                api.set_person_status(p, status_ids[DEFAULT_MITARBEITER_STATUS])
     if should_not_have_member_status:
         print(f"Downgrading persons from members to '{EX_MITARBEITER_STATUS}':")
         for p in should_not_have_member_status:
@@ -66,4 +78,5 @@ if __name__ == "__main__":
             print(
                 f"- #{p}\t{os.environ['CT_BASE_URL']}?q=churchdb#/PersonView/searchEntry:%23{p}/"
             )
-            api.set_person_status(p, status_ids[EX_MITARBEITER_STATUS])
+            if not args.dry_run:
+                api.set_person_status(p, status_ids[EX_MITARBEITER_STATUS])

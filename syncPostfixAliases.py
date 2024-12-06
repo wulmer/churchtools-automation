@@ -42,6 +42,8 @@ if __name__ == "__main__":
         for m in members:
             if "postfix:ignore" in ct.get_tags_for_person(m["personId"]):
                 continue
+            if not m['groupMemberStatus'] == "active":
+                continue
             try:
                 default_email = ct.get_default_email_for_person(m["personId"])
             except ValueError:

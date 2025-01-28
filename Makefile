@@ -1,4 +1,4 @@
-PYTHON=python3.9
+PYTHON=python3.10
 
 help:
 	@echo "Available make targets:"

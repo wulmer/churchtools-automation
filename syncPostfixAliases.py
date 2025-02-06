@@ -27,6 +27,7 @@ if __name__ == "__main__":
     groups_to_sync = {
         "Technik-Team": "technik-list@johanneskirche-rutesheim.de",
         "Kirchengemeinderat": "kgr-list@johanneskirche-rutesheim.de",
+        "KGR-Mitglieder Johanneskirche": "kgr-joki-list@johanneskirche-rutesheim.de",
         "Musik-Team": "musikteam-list@johanneskirche-rutesheim.de",
         "Mesner": "mesner-list@johanneskirche-rutesheim.de",
         "Netzwerktreffen": "netzwerktreffen-list@johanneskirche-rutesheim.de",
@@ -42,7 +43,7 @@ if __name__ == "__main__":
         for m in members:
             if "postfix:ignore" in ct.get_tags_for_person(m["personId"]):
                 continue
-            if not m['groupMemberStatus'] == "active":
+            if not m["groupMemberStatus"] == "active":
                 continue
             try:
                 default_email = ct.get_default_email_for_person(m["personId"])

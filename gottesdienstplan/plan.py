@@ -37,9 +37,7 @@ class GoogleSheet:
         return self._sheets.get(spreadsheetId=self._spreadsheet_id).execute()
 
     def get_rows_values(self, n_rows=30, skip_rows=0):
-        row_range = (
-            f"{self._table_name}!A{skip_rows+1}:{self._last_column}{skip_rows+n_rows}"
-        )
+        row_range = f"{self._table_name}!A{skip_rows + 1}:{self._last_column}{skip_rows + n_rows}"
         return self._values.get(
             spreadsheetId=self._spreadsheet_id,
             range=row_range,
@@ -178,7 +176,7 @@ class GoDiPlanChecker:
             self.check_technik_ton_kirche(event, report=report)
             self.check_technik_video_stream(event, report=report)
             self.check_technik_songbeamer(event, report=report)
-            #self.check_for_nextcloud_folder_and_ablauf(event, report=report)
+            # self.check_for_nextcloud_folder_and_ablauf(event, report=report)
 
     def check_basics(self, event, reporter=None):
         if (
@@ -192,8 +190,8 @@ class GoDiPlanChecker:
                 {
                     "message": (
                         f"Basisdaten (Uhrzeit, Anlass, Prediger) fehlen am "
-                        f'{event["Datum"].strftime("%a., %d. %b")}, '
-                        f'{event["Uhrzeit"]}'
+                        f"{event['Datum'].strftime('%a., %d. %b')}, "
+                        f"{event['Uhrzeit']}"
                     ),
                     "recipient": f"webmaster@{self._mail_domain}",
                 }
@@ -207,8 +205,8 @@ class GoDiPlanChecker:
                 {
                     "message": (
                         "Kein(e) Mesner(in) eingetragen am "
-                        f'{event["Datum"].strftime("%a., %d. %b")}, '
-                        f'{event["Uhrzeit"]}! '
+                        f"{event['Datum'].strftime('%a., %d. %b')}, "
+                        f"{event['Uhrzeit']}! "
                         "Bitte eine Person eintragen, oder wenn niemand benötigt "
                         "wird, ein Minuszeichen eintragen."
                     ),
@@ -224,12 +222,12 @@ class GoDiPlanChecker:
                 {
                     "message": (
                         "Kein KGR eingetragen am "
-                        f'{event["Datum"].strftime("%a., %d. %b")}, '
-                        f'{event["Uhrzeit"]} für Liturgendienst und Opfer zählen! '
+                        f"{event['Datum'].strftime('%a., %d. %b')}, "
+                        f"{event['Uhrzeit']} für Liturgendienst und Opfer zählen! "
                         "Bitte eine Person eintragen, oder wenn niemand benötigt "
                         "wird, ein Minuszeichen eintragen."
                     ),
-                    "recipient": f"kgr@{self._mail_domain}",
+                    "recipient": f"kgr-joki@{self._mail_domain}",
                 }
             )
 
@@ -241,8 +239,8 @@ class GoDiPlanChecker:
                 {
                     "message": (
                         "Kein Opferzweck eingetragen für "
-                        f'{event["Datum"].strftime("%a., %d. %b")}, '
-                        f'{event["Uhrzeit"]}! '
+                        f"{event['Datum'].strftime('%a., %d. %b')}, "
+                        f"{event['Uhrzeit']}! "
                         "Bitte einen Opferzweck eintragen, oder wenn kein Opfer "
                         "gesammelt wird oder kein Opferzweck benannt werden "
                         "kann ein Minuszeichen eintragen."
@@ -259,8 +257,8 @@ class GoDiPlanChecker:
                 {
                     "message": (
                         "Kein Tontechniker eingetragen am "
-                        f'{event["Datum"].strftime("%a., %d. %b")}, '
-                        f'{event["Uhrzeit"]}. '
+                        f"{event['Datum'].strftime('%a., %d. %b')}, "
+                        f"{event['Uhrzeit']}. "
                         "Bitte eine Person eintragen, oder wenn niemand benötigt "
                         "wird, ein Minuszeichen eintragen."
                     ),
@@ -276,8 +274,8 @@ class GoDiPlanChecker:
                 {
                     "message": (
                         "Kein Techniker für Stream und Kamera Mischpult eingetragen am "
-                        f'{event["Datum"].strftime("%a., %d. %b")}, '
-                        f'{event["Uhrzeit"]}. '
+                        f"{event['Datum'].strftime('%a., %d. %b')}, "
+                        f"{event['Uhrzeit']}. "
                         "Bitte eine Person eintragen, oder wenn niemand benötigt "
                         "wird, ein Minuszeichen eintragen."
                     ),
@@ -293,8 +291,8 @@ class GoDiPlanChecker:
                 {
                     "message": (
                         "Kein Techniker für Songbeamer eingetragen am "
-                        f'{event["Datum"].strftime("%a., %d. %b")}, '
-                        f'{event["Uhrzeit"]}. '
+                        f"{event['Datum'].strftime('%a., %d. %b')}, "
+                        f"{event['Uhrzeit']}. "
                         "Bitte eine Person eintragen, oder wenn niemand benötigt "
                         "wird, ein Minuszeichen eintragen."
                     ),
@@ -324,7 +322,7 @@ class GoDiPlanChecker:
                         {
                             "message": (
                                 "Es ist noch kein Ablauf auf NextCloud für den "
-                                f"Gottesdienst (\"{event['Art/Anlass/Thema']}\") am "
+                                f'Gottesdienst ("{event["Art/Anlass/Thema"]}") am '
                                 f"{event['Datum'].strftime('%a., %d. %b')} abgelegt. "
                                 f"Bitte im Verzeichnis '{base_folder}{event_datum}' "
                                 "eine Datei mit 'Ablauf' im Dateinamen ablegen! "
@@ -339,7 +337,7 @@ class GoDiPlanChecker:
                 {
                     "message": (
                         "Es ist noch kein Verzeichnis auf NextCloud für den "
-                        f"Gottesdienst (\"{event['Art/Anlass/Thema']}\") am "
+                        f'Gottesdienst ("{event["Art/Anlass/Thema"]}") am '
                         f"{event['Datum'].strftime('%a., %d. %b')} angelegt. "
                         f"Bitte ein Verzeichnis '{base_folder}{event_datum}' anlegen "
                         "und den Ablauf dort ablegen! Die Datei sollte das Wort "

@@ -67,7 +67,7 @@ sync_postfix: .venv_is_uptodate
 .PHONY: sync_mitarbeiter
 sync_mitarbeiter: .venv_is_uptodate
 	@.venv/bin/pipenv --bare run ${PYTHON} syncMitarbeiterStatus.py
-	@.venv/bin/pipenv --bare run ${PYTHON} syncAlleMitarbeiter.py
+	#@.venv/bin/pipenv --bare run ${PYTHON} syncAlleMitarbeiter.py
 
 .PHONY: archive_godiplan
 archive_godiplan: .venv_is_uptodate

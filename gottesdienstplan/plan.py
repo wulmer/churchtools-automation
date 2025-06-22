@@ -284,7 +284,7 @@ class GoDiPlanChecker:
             )
 
     def check_technik_songbeamer(self, event, report=None):
-        if not event["Songbeamer Texte und Lieder"]:
+        if not event["Songbeamer Bilder, Texte und Lieder"]:
             if report is None:
                 report = print
             report(

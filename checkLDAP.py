@@ -54,6 +54,7 @@ def check_nextcloud_settings():
         "ldapAttributeHeadline": "",
         "ldapAttributeOrganisation": "",
         "ldapAttributePhone": "",
+        "ldapAttributePronouns": "",
         "ldapAttributeRole": "",
         "ldapAttributeTwitter": "",
         "ldapAttributeWebsite": "",

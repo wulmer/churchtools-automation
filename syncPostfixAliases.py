@@ -26,12 +26,19 @@ if __name__ == "__main__":
     ct = ChurchToolsApi(os.environ["API_BASE_URL"], os.environ["ADMIN_TOKEN"])
     groups_to_sync = {
         "Technik-Team": "technik-list@johanneskirche-rutesheim.de",
+        "Technik-Team": "technik-list@rutesheim-evangelisch.de",
         "Kirchengemeinderat": "kgr-list@johanneskirche-rutesheim.de",
+        "Kirchengemeinderat": "kgr-list@rutesheim-evangelisch.de",
         "KGR-Mitglieder Johanneskirche": "kgr-joki-list@johanneskirche-rutesheim.de",
+        "KGR-Mitglieder Johanneskirche": "kgr-joki-list@rutesheim-evangelisch.de",
         "Musik-Team": "musikteam-list@johanneskirche-rutesheim.de",
+        "Musik-Team": "musikteam-list@rutesheim-evangelisch.de",
         "Mesner": "mesner-list@johanneskirche-rutesheim.de",
+        "Mesner": "mesner-list@rutesheim-evangelisch.de",
         "Netzwerktreffen": "netzwerktreffen-list@johanneskirche-rutesheim.de",
+        "Netzwerktreffen": "netzwerktreffen-list@rutesheim-evangelisch.de",
         "Welcome-Team": "welcometeam-list@johanneskirche-rutesheim.de",
+        "Welcome-Team": "welcometeam-list@rutesheim-evangelisch.de",
     }
 
     has_updates = False

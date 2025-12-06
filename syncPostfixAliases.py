@@ -44,7 +44,11 @@ if __name__ == "__main__":
     has_updates = False
     for group_ctname in groups_to_sync:
         alias = groups_to_sync[group_ctname]
-        ctgroup = list(ct.get_groups(query=group_ctname))[0]
+        try:
+                ctgroup = list(ct.get_groups(query=group_ctname))[0]
+        except IndexError:
+                print(f"ERROR: No group {group_ctname} found!")
+                raise
         members = ct.get_group_members(group_id=ctgroup["id"])
         recipients = []
         for m in members:

@@ -10,6 +10,7 @@ from nextcloud import NextCloud
 from .auth import spreadsheet_service
 
 SPREADSHEET_ID = os.environ["SPREADSHEET_ID"]
+SPREADSHEET_NAME = "GD Plan JK"
 NEXTCLOUD_BASE_URL = os.environ["NEXTCLOUD_BASE_URL"]
 NEXTCLOUD_TOKEN = os.environ["NEXTCLOUD_TOKEN"]
 NEXTCLOUD_USER = os.environ["NEXTCLOUD_USER"]
@@ -93,7 +94,7 @@ class GoogleSheet:
 
 class Gottesdienstplan:
     def __init__(self):
-        self._sheet = GoogleSheet(SPREADSHEET_ID, "Gottesdienstplan")
+        self._sheet = GoogleSheet(SPREADSHEET_ID, SPREADSHEET_NAME)
         self._headers = None
 
     def get_headers(self):

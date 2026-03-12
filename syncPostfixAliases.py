@@ -24,31 +24,30 @@ if __name__ == "__main__":
     mappings = Mapping.fromfile(postfix_db)
 
     ct = ChurchToolsApi(os.environ["API_BASE_URL"], os.environ["ADMIN_TOKEN"])
-    groups_to_sync = {
-        "Technik-Team": "technik-list@johanneskirche-rutesheim.de",
-        "Technik-Team": "technik-list@rutesheim-evangelisch.de",
-        "Kirchengemeinderat": "kgr-list@johanneskirche-rutesheim.de",
-        "Kirchengemeinderat": "kgr-list@rutesheim-evangelisch.de",
-        "KGR-Mitglieder Johanneskirche": "kgr-joki-list@johanneskirche-rutesheim.de",
-        "KGR-Mitglieder Johanneskirche": "kgr-joki-list@rutesheim-evangelisch.de",
-        "Musik-Team": "musikteam-list@johanneskirche-rutesheim.de",
-        "Musik-Team": "musikteam-list@rutesheim-evangelisch.de",
-        "Mesner": "mesner-list@johanneskirche-rutesheim.de",
-        "Mesner": "mesner-list@rutesheim-evangelisch.de",
-        "Netzwerktreffen": "netzwerktreffen-list@johanneskirche-rutesheim.de",
-        "Netzwerktreffen": "netzwerktreffen-list@rutesheim-evangelisch.de",
-        "Welcome-Team": "welcometeam-list@johanneskirche-rutesheim.de",
-        "Welcome-Team": "welcometeam-list@rutesheim-evangelisch.de",
-    }
+    groups_to_sync = [
+        ("Technik-Team", "technik-list@johanneskirche-rutesheim.de"),
+        ("Technik-Team", "technik-list@rutesheim-evangelisch.de"),
+        ("Kirchengemeinderat", "kgr-list@johanneskirche-rutesheim.de"),
+        ("Kirchengemeinderat", "kgr-list@rutesheim-evangelisch.de"),
+        ("KGR-Mitglieder Johanneskirche", "kgr-joki-list@johanneskirche-rutesheim.de"),
+        ("KGR-Mitglieder Johanneskirche", "kgr-joki-list@rutesheim-evangelisch.de"),
+        ("Musik-Team", "musikteam-list@johanneskirche-rutesheim.de"),
+        ("Musik-Team", "musikteam-list@rutesheim-evangelisch.de"),
+        ("Mesner", "mesner-list@johanneskirche-rutesheim.de"),
+        ("Mesner", "mesner-list@rutesheim-evangelisch.de"),
+        ("Netzwerktreffen", "netzwerktreffen-list@johanneskirche-rutesheim.de"),
+        ("Netzwerktreffen", "netzwerktreffen-list@rutesheim-evangelisch.de"),
+        ("Welcome-Team", "welcometeam-list@johanneskirche-rutesheim.de"),
+        ("Welcome-Team", "welcometeam-list@rutesheim-evangelisch.de"),
+    ]
 
     has_updates = False
-    for group_ctname in groups_to_sync:
-        alias = groups_to_sync[group_ctname]
+    for group_ctname, alias in groups_to_sync:
         try:
-                ctgroup = list(ct.get_groups(query=group_ctname))[0]
+            ctgroup = list(ct.get_groups(query=group_ctname))[0]
         except IndexError:
-                print(f"ERROR: No group {group_ctname} found!")
-                raise
+            print(f"ERROR: No group {group_ctname} found!")
+            raise
         members = ct.get_group_members(group_id=ctgroup["id"])
         recipients = []
         for m in members:

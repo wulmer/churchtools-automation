@@ -39,6 +39,8 @@ if __name__ == "__main__":
         ("Netzwerktreffen", "netzwerktreffen-list@rutesheim-evangelisch.de"),
         ("Welcome-Team", "welcometeam-list@johanneskirche-rutesheim.de"),
         ("Welcome-Team", "welcometeam-list@rutesheim-evangelisch.de"),
+        ("Bauausschuss", "ba-list@rutesheim-evangelisch.de"),
+        ("Verwaltungsausschuss", "vwa-list@rutesheim-evangelisch.de"),
     ]
 
     has_updates = False

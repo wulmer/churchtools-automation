@@ -106,7 +106,7 @@ class ChurchToolsApi:
         raise ValueError(f"Person #{person_id} has no default email address!")
 
     def get_tags_for_person(self, person_id: int) -> Set[str]:
-        response = self._session.get(self._base_url + f"/persons/{person_id}/tags")
+        response = self._session.get(self._base_url + f"/tags/person/{person_id}")
         response.raise_for_status()
         tags = {d["name"] for d in response.json()["data"]}
         return tags

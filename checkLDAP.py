@@ -99,7 +99,7 @@ def check_nextcloud_settings():
         "ldapPort": "636",
         "ldapQuotaAttribute": "",
         "ldapQuotaDefault": "",
-        "ldapTLS": "0",
+        "ldapTLS": "",
         "ldapUserAvatarRule": "default",
         "ldapUserDisplayName": "displayname",
         "ldapUserDisplayName2": "",
